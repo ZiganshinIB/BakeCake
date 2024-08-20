@@ -20,17 +20,17 @@ class CakeViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'list':
-            return [permissions.AllowAny]
+            return [permissions.AllowAny()]
         elif self.action == 'retrieve':
-            return [permissions.AllowAny]
+            return [permissions.AllowAny()]
         elif self.action == 'create':
-            return [permissions.IsAuthenticated]
+            return [permissions.IsAuthenticated()]
         elif self.action == 'update' or self.action == 'partial_update':
-            return [IsOwnerOrReadOnly, CanUpdateCake]
+            return [IsOwnerOrReadOnly(), CanUpdateCake()]
         elif self.action == 'destroy':
-            return [CanDeleteCake]
+            return [CanDeleteCake()]
         else:
-            return [permissions.IsAuthenticated]
+            return [permissions.IsAuthenticated()]
 
     def get_queryset(self):
         level = self.request.query_params.get('level', None)
@@ -60,17 +60,17 @@ class CakeLevelViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'list':
-            return [permissions.AllowAny]
+            return [permissions.AllowAny()]
         elif self.action == 'retrieve':
-            return [permissions.AllowAny]
+            return [permissions.AllowAny()]
         elif self.action == 'create':
-            return [CanCreateCakeLevel]
+            return [CanCreateCakeLevel()]
         elif self.action == 'update' or self.action == 'partial_update':
-            return [IsOwnerOrReadOnly, CanUpdateCakeLevel]
+            return [IsOwnerOrReadOnly(), CanUpdateCakeLevel()]
         elif self.action == 'destroy':
-            return [CanDeleteCakeLevel]
+            return [CanDeleteCakeLevel()]
         else:
-            return [permissions.IsAuthenticated]
+            return [permissions.IsAuthenticated()]
 
 class CakeShapeViewSet(viewsets.ModelViewSet):
     queryset = CakeShape.objects.all()
@@ -78,17 +78,17 @@ class CakeShapeViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'list':
-            return [permissions.AllowAny]
+            return [permissions.AllowAny()]
         elif self.action == 'retrieve':
-            return [permissions.AllowAny]
+            return [permissions.AllowAny()]
         elif self.action == 'create':
-            return [CanCreateCakeShape]
+            return [CanCreateCakeShape()]
         elif self.action == 'update' or self.action == 'partial_update':
-            return [IsOwnerOrReadOnly, CanUpdateCakeShape]
+            return [IsOwnerOrReadOnly(), CanUpdateCakeShape()]
         elif self.action == 'destroy':
-            return [CanDeleteCakeShape]
+            return [CanDeleteCakeShape()]
         else:
-            return [permissions.IsAuthenticated]
+            return [permissions.IsAuthenticated()]
 
 
 class CakeToppingViewSet(viewsets.ModelViewSet):
@@ -97,17 +97,17 @@ class CakeToppingViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'list':
-            return [permissions.AllowAny]
+            return [permissions.AllowAny()]
         elif self.action == 'retrieve':
-            return [permissions.AllowAny]
+            return [permissions.AllowAny()]
         elif self.action == 'create':
-            return [CanCreateCakeTopping]
+            return [CanCreateCakeTopping()]
         elif self.action == 'update' or self.action == 'partial_update':
-            return [IsOwnerOrReadOnly, CanUpdateCakeTopping]
+            return [IsOwnerOrReadOnly(), CanUpdateCakeTopping()]
         elif self.action == 'destroy':
-            return [CanDeleteCakeTopping]
+            return [CanDeleteCakeTopping()]
         else:
-            return [permissions.IsAuthenticated]
+            return [permissions.IsAuthenticated()]
 
 
 class CakeBerryViewSet(viewsets.ModelViewSet):
@@ -116,17 +116,17 @@ class CakeBerryViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'list':
-            return [permissions.AllowAny]
+            return [permissions.AllowAny()]
         elif self.action == 'retrieve':
-            return [permissions.AllowAny]
+            return [permissions.AllowAny()]
         elif self.action == 'create':
-            return [CanCreateCakeBerry]
+            return [CanCreateCakeBerry()]
         elif self.action == 'update' or self.action == 'partial_update':
-            return [IsOwnerOrReadOnly, CanUpdateCakeBerry]
+            return [IsOwnerOrReadOnly(), CanUpdateCakeBerry()]
         elif self.action == 'destroy':
-            return [CanDeleteCakeBerry]
+            return [CanDeleteCakeBerry()]
         else:
-            return [permissions.IsAuthenticated]
+            return [permissions.IsAuthenticated()]
 
 
 class CakeDecorViewSet(viewsets.ModelViewSet):
@@ -135,18 +135,17 @@ class CakeDecorViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'list':
-            return [permissions.AllowAny]
+            return [permissions.AllowAny()]
         elif self.action == 'retrieve':
-            return [permissions.AllowAny]
+            return [permissions.AllowAny()]
         elif self.action == 'create':
-            return [CanCreateCakeDecor]
+            return [CanCreateCakeDecor()]
         elif self.action == 'update' or self.action == 'partial_update':
-            return [IsOwnerOrReadOnly, CanUpdateCakeDecor]
+            return [IsOwnerOrReadOnly(), CanUpdateCakeDecor()]
         elif self.action == 'destroy':
-            return [CanDeleteCakeDecor]
+            return [CanDeleteCakeDecor()]
         else:
-            return [permissions.IsAuthenticated]
-
+            return [permissions.IsAuthenticated()]
 
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -155,17 +154,17 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'list':
-            return [IsOwner]
+            return [IsOwner()]
         elif self.action == 'retrieve':
-            return [IsOwner]
+            return [IsOwner()]
         elif self.action == 'create':
-            return [permissions.IsAuthenticated]
+            return [permissions.IsAuthenticated()]
         elif self.action == 'update' or self.action == 'partial_update':
-            return [IsOwnerOrReadOnly, CanUpdateOrder]
+            return [IsOwnerOrReadOnly(), CanUpdateOrder()]
         elif self.action == 'destroy':
-            return [CanDeleteOrder]
+            return [CanDeleteOrder()]
         else:
-            return [permissions.IsAuthenticated]
+            return [permissions.IsAuthenticated()]
 
     def get_queryset(self):
         if self.request.user.is_anonymous:
