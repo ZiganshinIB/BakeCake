@@ -14,8 +14,14 @@ class ClientRegistrationSerializer(BaseUserRegistrationSerializer):
 class CakeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cake
-        fields = '__all__'
+        fields = ['title', 'level', 'shape', 'topping', 'berry', 'decor', 'is_published', 'inscription', 'comment']
 
+    def create(self, validated_data):
+        validated_data['is_published'] = False
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
 
 class CakeLevelSerializer(serializers.ModelSerializer):
     class Meta:
