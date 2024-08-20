@@ -49,3 +49,22 @@ class CakeViewSet(viewsets.ModelViewSet):
         if filters:
             self.queryset = self.queryset.filter(filters)
         return self.queryset
+
+
+class CakeLevelViewSet(viewsets.ModelViewSet):
+    queryset = CakeLevel.objects.all()
+    serializer_class = CakeLevelSerializer
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [permissions.AllowAny()]
+        elif self.action == 'retrieve':
+            return [permissions.AllowAny()]
+        elif self.action == 'create':
+            return [permissions.IsAuthenticated()]
+        elif self.action == 'update' or self.action == 'partial_update':
+            return [IsOwnerOrReadOnly(), CanUpdateCakeLevel()]
+        elif self.action == 'destroy':
+            return [CanDeleteCake]
+        else:
+            return [permissions.IsAuthenticated()]
