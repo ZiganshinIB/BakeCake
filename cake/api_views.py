@@ -6,7 +6,7 @@ from rest_framework.exceptions import NotFound
 
 from django.db.models import Q
 
-from .models import Cake, CakeLevel, Order
+from .models import Cake, CakeLevel, Order, CakeShape, CakeTopping, CakeDecor, CakeBerry
 from .serializers import CakeSerializer, CakeLevelSerializer, OrderSerializer
 from .permissions import IsOwnerOrReadOnly, CanUpdateCake, CanDeleteCake, CanUpdateCakeLevel, CanCreateCakeLevel, \
     CanCreateCakeShape, CanUpdateCakeShape, CanCreateCakeTopping, CanDeleteCakeLevel, CanDeleteCakeShape, \
@@ -73,7 +73,7 @@ class CakeLevelViewSet(viewsets.ModelViewSet):
             return [permissions.IsAuthenticated]
 
 class CakeShapeViewSet(viewsets.ModelViewSet):
-    queryset = CakeLevel.objects.all()
+    queryset = CakeShape.objects.all()
     serializer_class = CakeLevelSerializer
 
     def get_permissions(self):
@@ -92,7 +92,7 @@ class CakeShapeViewSet(viewsets.ModelViewSet):
 
 
 class CakeToppingViewSet(viewsets.ModelViewSet):
-    queryset = CakeLevel.objects.all()
+    queryset = CakeTopping.objects.all()
     serializer_class = CakeLevelSerializer
 
     def get_permissions(self):
@@ -111,7 +111,7 @@ class CakeToppingViewSet(viewsets.ModelViewSet):
 
 
 class CakeBerryViewSet(viewsets.ModelViewSet):
-    queryset = CakeLevel.objects.all()
+    queryset = CakeBerry.objects.all()
     serializer_class = CakeLevelSerializer
 
     def get_permissions(self):
@@ -130,7 +130,7 @@ class CakeBerryViewSet(viewsets.ModelViewSet):
 
 
 class CakeDecorViewSet(viewsets.ModelViewSet):
-    queryset = CakeLevel.objects.all()
+    queryset = CakeDecor.objects.all()
     serializer_class = CakeLevelSerializer
 
     def get_permissions(self):
