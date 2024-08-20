@@ -36,6 +36,15 @@ class CanDeleteCake(BasePermission):
             return True
         return False
 
+class CanCreateCakeLevel(BasePermission):
+    """
+    Проверка разрешения на создание уровня торта
+    """
+
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.has_perm('cake.add_cakelevl'):
+            return True
+        return False
 
 class CanUpdateCakeLevel(BasePermission):
     """
@@ -59,6 +68,16 @@ class CanDeleteCakeLevel(BasePermission):
         return False
 
 
+class CanCreateCakeShape(BasePermission):
+    """
+    Проверка разрешения на создание формы торта
+    """
+
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.has_perm('cake.add_cakeshape'):
+            return True
+        return False
+
 class CanUpdateCakeShape(BasePermission):
     """
     Проверка разрешения на обновление формы торта
@@ -81,6 +100,17 @@ class CanDeleteCakeShape(BasePermission):
         return False
 
 
+class CanCreateCakeTopping(BasePermission):
+    """
+    Проверка разрешения на создание топпинга торта
+    """
+
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.has_perm('cake.add_caketopping'):
+            return True
+        return False
+
+
 class CanUpdateCakeTopping(BasePermission):
     """
     Проверка разрешения на обновление топпинга торта
@@ -99,6 +129,17 @@ class CanDeleteCakeTopping(BasePermission):
 
     def has_permission(self, request, view):
         if request.user.is_authenticated and request.user.has_perm('cake.delete_caketopping'):
+            return True
+        return False
+
+
+class CanCreateCakeBerry(BasePermission):
+    """
+    Проверка разрешения на создание ягод торта
+    """
+
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.has_perm('cake.add_cakeberry'):
             return True
         return False
 
