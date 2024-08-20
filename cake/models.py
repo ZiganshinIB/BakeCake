@@ -283,7 +283,7 @@ class Client(AbstractBaseUser, PermissionsMixin):
         },
     )
     # Телефоный номер для входа
-    phonenumber = PhoneNumberField(
+    phone_number = PhoneNumberField(
         "Телефоный номер",
         unique=True,
         help_text="Телефоный номер должен быть русского формата 8XXXXXXXXXX",
@@ -313,7 +313,7 @@ class Client(AbstractBaseUser, PermissionsMixin):
 
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'name'
-    REQUIRED_FIELDS = ['phonenumber']
+    REQUIRED_FIELDS = ['phone_number']
 
     class Meta:
         verbose_name = "Пользователь"
@@ -324,7 +324,7 @@ class Client(AbstractBaseUser, PermissionsMixin):
         self.email = self.__class__.objects.normalize_email(self.email)
 
     def get_full_name(self):
-        return "{} {}".format(self.name, self.phonenumber)
+        return "{} {}".format(self.name, self.phone_number)
 
     def get_short_name(self):
         return self.name

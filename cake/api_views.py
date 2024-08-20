@@ -6,9 +6,12 @@ from rest_framework.exceptions import NotFound
 
 from django.db.models import Q
 
-from .models import Cake, CakeLevel
-from .serializers import CakeSerializer, CakeLevelSerializer
-from .permissions import IsOwnerOrReadOnly, CanUpdateCake, CanDeleteCake
+from .models import Cake, CakeLevel, Order, CakeShape, CakeTopping, CakeDecor, CakeBerry
+from .serializers import CakeSerializer, CakeLevelSerializer, OrderSerializer
+from .permissions import IsOwnerOrReadOnly, CanUpdateCake, CanDeleteCake, CanUpdateCakeLevel, CanCreateCakeLevel, \
+    CanCreateCakeShape, CanUpdateCakeShape, CanCreateCakeTopping, CanDeleteCakeLevel, CanDeleteCakeShape, \
+    CanDeleteCakeTopping, CanUpdateCakeTopping, CanCreateCakeBerry, CanUpdateCakeBerry, CanDeleteCakeBerry, \
+    CanUpdateOrder, CanDeleteOrder, CanCreateCakeDecor, CanUpdateCakeDecor, CanDeleteCakeDecor, IsOwner
 
 
 class CakeViewSet(viewsets.ModelViewSet):
@@ -25,7 +28,7 @@ class CakeViewSet(viewsets.ModelViewSet):
         elif self.action == 'update' or self.action == 'partial_update':
             return [IsOwnerOrReadOnly(), CanUpdateCake()]
         elif self.action == 'destroy':
-            return [CanDeleteCake]
+            return [CanDeleteCake()]
         else:
             return [permissions.IsAuthenticated()]
 
@@ -49,3 +52,124 @@ class CakeViewSet(viewsets.ModelViewSet):
         if filters:
             self.queryset = self.queryset.filter(filters)
         return self.queryset
+
+
+class CakeLevelViewSet(viewsets.ModelViewSet):
+    queryset = CakeLevel.objects.all()
+    serializer_class = CakeLevelSerializer
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [permissions.AllowAny()]
+        elif self.action == 'retrieve':
+            return [permissions.AllowAny()]
+        elif self.action == 'create':
+            return [CanCreateCakeLevel()]
+        elif self.action == 'update' or self.action == 'partial_update':
+            return [IsOwnerOrReadOnly(), CanUpdateCakeLevel()]
+        elif self.action == 'destroy':
+            return [CanDeleteCakeLevel()]
+        else:
+            return [permissions.IsAuthenticated()]
+
+class CakeShapeViewSet(viewsets.ModelViewSet):
+    queryset = CakeShape.objects.all()
+    serializer_class = CakeLevelSerializer
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [permissions.AllowAny()]
+        elif self.action == 'retrieve':
+            return [permissions.AllowAny()]
+        elif self.action == 'create':
+            return [CanCreateCakeShape()]
+        elif self.action == 'update' or self.action == 'partial_update':
+            return [IsOwnerOrReadOnly(), CanUpdateCakeShape()]
+        elif self.action == 'destroy':
+            return [CanDeleteCakeShape()]
+        else:
+            return [permissions.IsAuthenticated()]
+
+
+class CakeToppingViewSet(viewsets.ModelViewSet):
+    queryset = CakeTopping.objects.all()
+    serializer_class = CakeLevelSerializer
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [permissions.AllowAny()]
+        elif self.action == 'retrieve':
+            return [permissions.AllowAny()]
+        elif self.action == 'create':
+            return [CanCreateCakeTopping()]
+        elif self.action == 'update' or self.action == 'partial_update':
+            return [IsOwnerOrReadOnly(), CanUpdateCakeTopping()]
+        elif self.action == 'destroy':
+            return [CanDeleteCakeTopping()]
+        else:
+            return [permissions.IsAuthenticated()]
+
+
+class CakeBerryViewSet(viewsets.ModelViewSet):
+    queryset = CakeBerry.objects.all()
+    serializer_class = CakeLevelSerializer
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [permissions.AllowAny()]
+        elif self.action == 'retrieve':
+            return [permissions.AllowAny()]
+        elif self.action == 'create':
+            return [CanCreateCakeBerry()]
+        elif self.action == 'update' or self.action == 'partial_update':
+            return [IsOwnerOrReadOnly(), CanUpdateCakeBerry()]
+        elif self.action == 'destroy':
+            return [CanDeleteCakeBerry()]
+        else:
+            return [permissions.IsAuthenticated()]
+
+
+class CakeDecorViewSet(viewsets.ModelViewSet):
+    queryset = CakeDecor.objects.all()
+    serializer_class = CakeLevelSerializer
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [permissions.AllowAny()]
+        elif self.action == 'retrieve':
+            return [permissions.AllowAny()]
+        elif self.action == 'create':
+            return [CanCreateCakeDecor()]
+        elif self.action == 'update' or self.action == 'partial_update':
+            return [IsOwnerOrReadOnly(), CanUpdateCakeDecor()]
+        elif self.action == 'destroy':
+            return [CanDeleteCakeDecor()]
+        else:
+            return [permissions.IsAuthenticated()]
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [IsOwner()]
+        elif self.action == 'retrieve':
+            return [IsOwner()]
+        elif self.action == 'create':
+            return [permissions.IsAuthenticated()]
+        elif self.action == 'update' or self.action == 'partial_update':
+            return [IsOwnerOrReadOnly(), CanUpdateOrder()]
+        elif self.action == 'destroy':
+            return [CanDeleteOrder()]
+        else:
+            return [permissions.IsAuthenticated()]
+
+    def get_queryset(self):
+        if self.request.user.is_anonymous:
+            return Order.objects.none()
+        if self.request.user.is_superuser:
+            return self.queryset
+        user = self.request.user
+        return Order.objects.filter(customer=user)
