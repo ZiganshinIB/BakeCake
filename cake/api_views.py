@@ -11,7 +11,7 @@ from .serializers import CakeSerializer, CakeLevelSerializer, OrderSerializer
 from .permissions import IsOwnerOrReadOnly, CanUpdateCake, CanDeleteCake, CanUpdateCakeLevel, CanCreateCakeLevel, \
     CanCreateCakeShape, CanUpdateCakeShape, CanCreateCakeTopping, CanDeleteCakeLevel, CanDeleteCakeShape, \
     CanDeleteCakeTopping, CanUpdateCakeTopping, CanCreateCakeBerry, CanUpdateCakeBerry, CanDeleteCakeBerry, \
-    CanUpdateOrder, CanDeleteOrder
+    CanUpdateOrder, CanDeleteOrder, CanCreateCakeDecor, CanUpdateCakeDecor, CanDeleteCakeDecor
 
 
 class CakeViewSet(viewsets.ModelViewSet):
@@ -128,6 +128,24 @@ class CakeBerryViewSet(viewsets.ModelViewSet):
         else:
             return [permissions.IsAuthenticated]
 
+
+class CakeDecorViewSet(viewsets.ModelViewSet):
+    queryset = CakeLevel.objects.all()
+    serializer_class = CakeLevelSerializer
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [permissions.AllowAny]
+        elif self.action == 'retrieve':
+            return [permissions.AllowAny]
+        elif self.action == 'create':
+            return [CanCreateCakeDecor]
+        elif self.action == 'update' or self.action == 'partial_update':
+            return [IsOwnerOrReadOnly, CanUpdateCakeDecor]
+        elif self.action == 'destroy':
+            return [CanDeleteCakeDecor]
+        else:
+            return [permissions.IsAuthenticated]
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()

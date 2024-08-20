@@ -165,6 +165,15 @@ class CanDeleteCakeBerry(BasePermission):
             return True
         return False
 
+class CanCreateCakeDecor(BasePermission):
+    """
+    Проверка разрешения на создание вкуса торта
+    """
+
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.has_perm('cake.add_cakedecor'):
+            return True
+        return False
 
 class CanUpdateCakeDecor(BasePermission):
     """
