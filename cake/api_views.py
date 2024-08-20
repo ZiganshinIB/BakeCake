@@ -11,7 +11,7 @@ from .serializers import CakeSerializer, CakeLevelSerializer, OrderSerializer
 from .permissions import IsOwnerOrReadOnly, CanUpdateCake, CanDeleteCake, CanUpdateCakeLevel, CanCreateCakeLevel, \
     CanCreateCakeShape, CanUpdateCakeShape, CanCreateCakeTopping, CanDeleteCakeLevel, CanDeleteCakeShape, \
     CanDeleteCakeTopping, CanUpdateCakeTopping, CanCreateCakeBerry, CanUpdateCakeBerry, CanDeleteCakeBerry, \
-    CanUpdateOrder, CanDeleteOrder, CanCreateCakeDecor, CanUpdateCakeDecor, CanDeleteCakeDecor
+    CanUpdateOrder, CanDeleteOrder, CanCreateCakeDecor, CanUpdateCakeDecor, CanDeleteCakeDecor, IsOwner
 
 
 class CakeViewSet(viewsets.ModelViewSet):
@@ -147,15 +147,17 @@ class CakeDecorViewSet(viewsets.ModelViewSet):
         else:
             return [permissions.IsAuthenticated]
 
+
+
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
     def get_permissions(self):
         if self.action == 'list':
-            return [permissions.AllowAny]
+            return [IsOwner]
         elif self.action == 'retrieve':
-            return [permissions.AllowAny]
+            return [IsOwner]
         elif self.action == 'create':
             return [permissions.IsAuthenticated]
         elif self.action == 'update' or self.action == 'partial_update':
@@ -164,3 +166,11 @@ class OrderViewSet(viewsets.ModelViewSet):
             return [CanDeleteOrder]
         else:
             return [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        if self.request.user.is_anonymous:
+            return Order.objects.none()
+        if self.request.user.is_superuser:
+            return self.queryset
+        user = self.request.user
+        return Order.objects.filter(customer=user)
