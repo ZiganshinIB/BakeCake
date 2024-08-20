@@ -283,7 +283,7 @@ class Client(AbstractBaseUser, PermissionsMixin):
         },
     )
     # Телефоный номер для входа
-    phonenumber = PhoneNumberField(
+    phone_number = PhoneNumberField(
         "Телефоный номер",
         unique=True,
         help_text="Телефоный номер должен быть русского формата 8XXXXXXXXXX",

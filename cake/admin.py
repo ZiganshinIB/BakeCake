@@ -5,7 +5,7 @@ from .models import Client, Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, 
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ("name", "phonenumber", "email")
+    list_display = ("name", "phone_number", "email")
 
 
 
