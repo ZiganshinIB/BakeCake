@@ -41,6 +41,10 @@ class CakeBerryAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ("client", "cake", "decor", "words", "comments", "deliv_comments", "registered_at")
+    list_display = ("customer", "cake", "registered_at")
     ordering = ["-registered_at"]
+
+    @admin.display(description='Delivery Comments')
+    def get_deliv_comments(self, obj):
+        return obj.cake.deliv_comments
 

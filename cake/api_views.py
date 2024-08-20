@@ -49,6 +49,3 @@ class CakeViewSet(viewsets.ModelViewSet):
         if filters:
             self.queryset = self.queryset.filter(filters)
         return self.queryset
-
-
-class
