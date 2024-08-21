@@ -275,12 +275,9 @@ class Client(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(
         _('name'),
         max_length=150,
-        unique=True,
         help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
-        validators=[username_validator],
-        error_messages={
-            'unique': _("A user with that username already exists."),
-        },
+        null=True,
+        blank=True
     )
     # Телефоный номер для входа
     phone_number = PhoneNumberField(
@@ -294,6 +291,8 @@ class Client(AbstractBaseUser, PermissionsMixin):
 
     # Почта
     email = models.EmailField(_("email address"), blank=True)
+    # pin
+    pin = models.CharField(_("pin"), max_length=4, blank=True)
 
     is_staff = models.BooleanField(
         _("staff status"),
@@ -312,8 +311,8 @@ class Client(AbstractBaseUser, PermissionsMixin):
     objects = ClientManager()
 
     EMAIL_FIELD = 'email'
-    USERNAME_FIELD = 'name'
-    REQUIRED_FIELDS = ['phone_number']
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = ['name']
 
     class Meta:
         verbose_name = "Пользователь"
@@ -332,3 +331,5 @@ class Client(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+    def __str__(self):
+        return f"{self.name} ({self.phone_number})"

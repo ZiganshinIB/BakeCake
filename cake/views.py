@@ -1,9 +1,16 @@
 from lib2to3.fixes.fix_input import context
+from smtpd import usage
 
+from django.contrib.auth import login
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 
-from .models import Cake
+from .forms import PhoneForm, PinForm
+from .models import Cake, Client
+from .utils import get_code
 
 
 # Create your views here.
@@ -26,6 +33,41 @@ class CakeListView(ListView):
 # TODO: Создание торта
 
 # TODO: Личный кабинет
+
+
+# TODO: Регистрация
+@require_POST
+def registration(request):
+    if 'phone_number' in request.POST:
+        form = PhoneForm(request.POST)
+        if form.is_valid():
+            phone_number = form.cleaned_data['phone_number']
+            code = get_code()
+            client, created = Client.objects.get_or_create(phone_number=phone_number)
+            client.pin = code
+            client.save()
+
+            request.session['verification_code'] = code
+            request.session['phone_number'] = phone_number
+
+            return JsonResponse({'status': 'success', 'phone_number': phone_number, 'code': code})
+        else:
+            return JsonResponse({'status': 'error', 'errors': form.errors})
+    elif 'pin' in request.POST:
+        form = PinForm(request.POST)
+        if form.is_valid():
+            pin = form.cleaned_data['pin']
+            saved_code = request.session.get('verification_code')
+            phone_number = request.session.get('phone_number')
+            if pin == saved_code:
+                client = Client.objects.get(phone_number=phone_number)
+                if (client is not None) and client.is_active:
+                    login(request, client)
+                    return JsonResponse({'status': 'success'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Неправильный пин-код'})
+        else:
+            return JsonResponse({'status': 'error', 'errors': form.errors})
 
 
 

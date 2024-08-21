@@ -26,31 +26,44 @@ class CakeSerializer(serializers.ModelSerializer):
 class CakeLevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = CakeLevel
-        fields = '__all__'
+        fields = ['level_count', 'price']
 
 class CakeShapeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CakeShape
-        fields = '__all__'
+        fields = ['shape', 'price']
 
 class CakeToppingSerializer(serializers.ModelSerializer):
     class Meta:
         model = CakeTopping
-        fields = '__all__'
+        fields = ['cake_topping', 'price']
 
 class CakeBerrySerializer(serializers.ModelSerializer):
     class Meta:
         model = CakeBerry
-        fields = '__all__'
+        fields = ['cake_berry', 'price']
 
 class CakeDecorSerializer(serializers.ModelSerializer):
     class Meta:
         model = CakeDecor
-        fields = '__all__'
+        fields = ['cake_decor', 'price']
 
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = [
+            'customer',
+            'cake',
+            'status',
+            'status_pay',
+            'registered_at',
+            'called_at',
+            'price',
+            'address',
+            'delivery_date',
+            'delivered_at',
+            'delivery_comments',
+        ]
+        read_only_fields = ['registered_at']
 
