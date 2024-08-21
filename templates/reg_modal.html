@@ -18,9 +18,11 @@
 
       <v-form :validation-schema="RegSchema"
               class="modal-body position-relative d-flex flex-column align-items-center px-5 pb-4" @submit="RegSubmit">
+        <v-field v-if="Step === 'Number'" v-model="Name" name="name" type="text" placeholder="Введите ваше имя" class="form-control cake__textinput"></v-field>
         <v-field v-if="RegInput !== 'Регистрация успешна'" v-model="RegInput" name="reg" type="text" id="reg"
                  :placeholder="Step === `Number` ? `Введите ваш номер` : `Введите код`"
                  class="form-control cake__textinput"></v-field>
+
         <v-field v-if="Step === 'Number'" v-model="RegInput" type="phone" name="phone_format" class="d-none"></v-field>
         <v-field v-if="Step === 'Code'" v-model="RegInput" type="phone" name="code_format" class="d-none"></v-field>
         <button v-if="RegInput !== 'Регистрация успешна'" type="submit"
@@ -28,6 +30,7 @@
           Отправить
         </button>
         <span v-if="RegInput === 'Регистрация успешна'" class="cake_grey text-center">Регистрация успешна</span>
+
         {% verbatim %}
         <small class="fs_12 cake_pink text-center position-absolute bottom-0">
           <error-message name="reg">
@@ -40,6 +43,7 @@
           </error-message>
         </small>
         {% endverbatim %}
+
         <error-message name="phone_format"
                        class="fs_12 cake_pink text-center position-absolute bottom-0"></error-message>
         <error-message name="code_format"
