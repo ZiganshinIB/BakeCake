@@ -294,6 +294,8 @@ class Client(AbstractBaseUser, PermissionsMixin):
 
     # Почта
     email = models.EmailField(_("email address"), blank=True)
+    # pin
+    pin = models.CharField(_("pin"), max_length=4, blank=True)
 
     is_staff = models.BooleanField(
         _("staff status"),
