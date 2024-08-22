@@ -191,9 +191,10 @@
 			</section>
 
 			<section class="row pt-header" id="step4" v-if="Designed">
-				<form class="d-none">
+				<form action="{% url 'index' %}" method="POST" class="d-none">
 					{% csrf_token %}
 					{% for level in levels %}
+
 						<input v-model="Levels" value="{{ level.id }}" type="radio" name="LEVELS">
 					{% endfor %}
 					<br>
@@ -258,22 +259,28 @@
 									<error-message name="email_format" class="position-absolute bottom-0 cake_pink fs_12"></error-message>
 								</div>
 							</div>
-							{% verbatim %}
+
 							<div class="col-12 col-lg-4 d-flex justify-content-center justify-content-lg-end">
 								<div class="cake__card p-4 position-relative cake_grey">
 									<span class="cake__badge rounded-pill">?</span>
-									<span>Количество уровней: {{ DATA.Levels[Levels] }}</span>
-									<span>Форма уровней: {{ DATA.Forms[Form] }}</span>
-									<p>Топинг: {{ DATA.Toppings[Topping] }}</p>
+									<span>Количество уровней: {{ cake.level_count }}</span>
+									<span>Форма уровней: {{ cake.shape }}</span>
+									<p>Топинг: {{ cake.topping }}</p>
 									<span>Дополнительно:</span>
 									<ul>
-										<li>Ягоды: {{ DATA.Berries[Berries] }}</li>
-										<li>Декор: {{ DATA.Decors[Decor] }}</li>
+										{% if cake.berry %}
+											<li>Ягоды: {{ cake.berry }}</li>
+										{% endif %}
+										{% if cake.decor %}
+											<li>Декор: {{ cake.decor }}</li>
+										{% endif %}
 									</ul>
+									{% verbatim %}
 									<span>{{ Words === '' ? 'Без надписи' : Words }}</span>
+									{% endverbatim %}
 								</div>
 							</div>
-							{% endverbatim %}
+
 						</div>
 						<div class="d-flex flex-column position-relative pb-4">
 							<h2 class="fs_40 cake_pink">Данные для доставки</h2>
@@ -322,4 +329,30 @@
 {% block js_file %}
 <script src="{% static 'js/index.js' %}"></script>
 <script src="{% static 'js/registration.js' %}"></script>
+{% block javascript %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function () {
+		// catch the form's change event
+		$("form :input").change(function() {
+
+			// create an AJAX call
+			$.ajax({
+				data: $(this).serialize(), // get the form data
+				url: "{% url 'api/v1/calc/' %}",
+				// on success
+				success: function (response) {
+					$('#cost').text(response.price);
+				},
+				// on error
+				error: function (response) {
+					// alert the error if any error occured
+					console.log(response.responseJSON.errors)
+				}
+			});
+			return false;
+		});
+	})
+</script>
+{% endblock javascript %}
 {% endblock %}

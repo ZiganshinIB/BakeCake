@@ -11,6 +11,14 @@ class ClientRegistrationSerializer(BaseUserRegistrationSerializer):
         }
 
 
+class CakePriceRequestSerializer(serializers.Serializer):
+    level_id = serializers.IntegerField(required=True)
+    shape_id = serializers.IntegerField(required=True)
+    topping_id = serializers.IntegerField(required=True)
+    berry_id = serializers.IntegerField(required=True)
+    decor_id = serializers.IntegerField(required=True)
+
+
 class CakeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cake
@@ -23,25 +31,30 @@ class CakeSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
 
+
 class CakeLevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = CakeLevel
         fields = '__all__'
+
 
 class CakeShapeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CakeShape
         fields = '__all__'
 
+
 class CakeToppingSerializer(serializers.ModelSerializer):
     class Meta:
         model = CakeTopping
         fields = '__all__'
 
+
 class CakeBerrySerializer(serializers.ModelSerializer):
     class Meta:
         model = CakeBerry
         fields = '__all__'
+
 
 class CakeDecorSerializer(serializers.ModelSerializer):
     class Meta:

@@ -127,7 +127,7 @@ Vue.createApp({
             setTimeout(() => this.$refs.ToStep4.click(), 0);
         }
     },
-    computed: {
+    /*computed: {
         Cost() {
             let W = this.Words ? this.Costs.Words : 0
             return this.Costs.Levels[this.Levels] + this.Costs.Forms[this.Form] +
@@ -135,4 +135,4 @@ Vue.createApp({
                 this.Costs.Decors[this.Decor] + W
         }
     }
-}).mount('#VueApp')
+}).mount('#VueApp')*/
