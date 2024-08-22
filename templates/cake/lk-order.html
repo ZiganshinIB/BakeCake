@@ -15,7 +15,7 @@
 			<div><img src="{% static 'img/Cake.png' %}" alt=""></div>
 		</div>
 		<div class="col-12 col-xxl-6 d-flex flex-column justify-content-center align-items-center align-items-xxl-start" id="LK">
-			<form class="d-none" action="#" method="POST">
+			<form class="d-none" action="{% url 'lk' %}" method="POST">
 				<input v-model="Name" name="name">
 				<input v-model="Phone" name="phone_number">
 				<input v-model="Email" name="email">

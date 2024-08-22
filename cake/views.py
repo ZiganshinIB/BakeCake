@@ -1,11 +1,11 @@
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView, ListView
 
-from .forms import PhoneForm, PinForm
+from .forms import PhoneForm, PinForm, ClientEditForm
 from .models import Cake, Client
 from .utils import get_code
 
@@ -31,7 +31,7 @@ class CakeListView(ListView):
 
 # TODO: Личный кабинет
 class ProfileView(LoginRequiredMixin, TemplateView):
-    template_name = 'cake/lk.html'  # Укажите путь к вашему шаблону
+    template_name = 'cake/lk-order.html'  # Укажите путь к вашему шаблону
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -41,9 +41,23 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         client = get_object_or_404(Client, phone_number=user.phone_number)
 
         # Добавляем данные клиента в контекст
-        context['client'] = client
         context['title'] = 'Личный кабинет'
         return context
+
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        client = get_object_or_404(Client, phone_number=user.phone_number)
+        form = ClientEditForm(request.POST, instance=client)
+        if form.is_valid():
+            form.save()
+            return redirect('lk')
+        return self.get(request, *args, **kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.method.lower() == 'put':
+            return self.put(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
 
 # TODO: Регистрация
