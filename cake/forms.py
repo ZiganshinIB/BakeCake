@@ -1,5 +1,7 @@
 from django import forms
 
+from .models import Client
+
 
 class PhoneForm(forms.Form):
     phone_number = forms.CharField(
@@ -30,3 +32,9 @@ class PinForm(forms.Form):
             'style': 'width: 200px; height: 50px;'
         })
     )
+
+
+class ClientEditForm(forms.ModelForm):
+    class Meta:
+        model = Client
+        fields = ['name', 'phone_number', 'email']
