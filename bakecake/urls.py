@@ -26,7 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('cake.urls')),
     path('api/v1/', include('cake.api_urls')),
-    re_path(r'^auth/', include('djoser.urls.authtoken'))
+    re_path(r'^auth/', include('django.contrib.auth.urls'))
 ]
 
 if settings.DEBUG:
