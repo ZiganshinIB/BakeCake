@@ -1,11 +1,6 @@
-from lib2to3.fixes.fix_input import context
-from smtpd import usage
-
 from django.contrib.auth import login
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 
 from .forms import PhoneForm, PinForm
@@ -38,13 +33,20 @@ class CakeListView(ListView):
 # TODO: Регистрация
 @require_POST
 def registration(request):
+    print(request.POST)
     if 'phone_number' in request.POST:
         form = PhoneForm(request.POST)
         if form.is_valid():
             phone_number = form.cleaned_data['phone_number']
+            name = form.cleaned_data['name']
             code = get_code()
             client, created = Client.objects.get_or_create(phone_number=phone_number)
+            if (not created) and (client.name != name):
+                print('except')
+                # except
+                return JsonResponse({'status': 'error', 'errors': 'Имя не совпадает'})
             client.pin = code
+            client.name = name
             client.save()
 
             request.session['verification_code'] = code

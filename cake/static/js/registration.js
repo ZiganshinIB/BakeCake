@@ -7,6 +7,12 @@ Vue.createApp({
     data() {
         return {
             RegSchema: {
+                name: (value) => {
+                    if (value) {
+                        return true;
+                    }
+                    return 'Поле не заполнено';
+                },
                 reg: (value) => {
                     if (value) {
                         return true;
@@ -38,7 +44,9 @@ Vue.createApp({
             },
             Step: 'Number',
             RegInput: '',
+            Name: '',
             EnteredNumber: ''
+
         }
     },
     methods: {
@@ -46,6 +54,7 @@ Vue.createApp({
             if (this.Step === 'Number') {
                 const formData = new FormData();
                 formData.append('phone_number', this.RegInput);
+                formData.append('name', this.Name);
                 formData.append('csrfmiddlewaretoken', csrfToken);
                 const response = fetch(registerUrl, {
                     method: 'POST',
@@ -61,10 +70,17 @@ Vue.createApp({
                     return response.json();
                 })
                 .then(data => {
-                    this.Step = 'Code';
-                    this.EnteredNumber = this.RegInput;
-                    this.RegInput = '';
-                    alert(data.code);
+                    if (data.errors) {
+                        document.getElementById('NameError').innerText = data.errors;
+
+                    }else {
+                        this.Step = 'Code';
+                        this.EnteredNumber = this.RegInput;
+                        this.RegInput = '';
+                        alert(data.code);
+                    }
+
+
                 })
                 .catch(error => {
                     this.errorMessage = 'Ошибка при регистрации: ' + error.message;
@@ -106,6 +122,7 @@ Vue.createApp({
         Reset() {
             this.Step = 'Number'
             this.RegInput = ''
+            this.Name = ''
             EnteredNumber = ''
         }
     }
