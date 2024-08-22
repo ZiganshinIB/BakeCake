@@ -13,7 +13,6 @@ Vue.createApp({
                     }
                     return 'Поле не заполнено';
                 },
-
                 reg: (value) => {
                     if (value) {
                         return true;
@@ -72,8 +71,7 @@ Vue.createApp({
                 })
                 .then(data => {
                     if (data.errors) {
-                        alert(data.errors);
-                        this.nameError = data.errors;
+                        document.getElementById('NameError').innerText = data.errors;
 
                     }else {
                         this.Step = 'Code';
