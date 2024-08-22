@@ -7,12 +7,6 @@ Vue.createApp({
     data() {
         return {
             RegSchema: {
-                name: (value) => {
-                    if (value) {
-                        return true;
-                    }
-                    return 'Поле не заполнено';
-                },
                 reg: (value) => {
                     if (value) {
                         return true;
@@ -87,6 +81,7 @@ Vue.createApp({
                 });
             }
             else if (this.Step === 'Code') {
+                alert("Подтверждение PIN-кода")
                 const formData = new FormData();
                 formData.append('pin', this.RegInput); // Отправляем PIN-код
                 formData.append('csrfmiddlewaretoken', csrfToken);
@@ -106,6 +101,7 @@ Vue.createApp({
                     console.log('Вход успешен:', data);
                     this.Step = 'Finish';
                     this.RegInput = 'Регистрация успешна';
+
                 })
                 .catch(error => {
                     this.errorMessage = 'Ошибка при подтверждении PIN-кода: ' + error.message;
