@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import path, include, re_path
 
 from django.contrib.staticfiles.urls import static
@@ -26,7 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('cake.urls')),
     path('api/v1/', include('cake.api_urls')),
-    re_path(r'^auth/', include('django.contrib.auth.urls'))
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
 
 if settings.DEBUG:
