@@ -1,5 +1,7 @@
 from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView, ListView
 
@@ -28,6 +30,20 @@ class CakeListView(ListView):
 # TODO: Создание торта
 
 # TODO: Личный кабинет
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'cake/lk.html'  # Укажите путь к вашему шаблону
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user  # Получаем текущего пользователя
+
+        # Получаем объект пользователя (или клиента)
+        client = get_object_or_404(Client, phone_number=user.phone_number)
+
+        # Добавляем данные клиента в контекст
+        context['client'] = client
+        context['title'] = 'Личный кабинет'
+        return context
 
 
 # TODO: Регистрация
