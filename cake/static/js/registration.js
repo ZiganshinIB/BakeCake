@@ -38,21 +38,77 @@ Vue.createApp({
             },
             Step: 'Number',
             RegInput: '',
+            Name: '',
             EnteredNumber: ''
+
         }
     },
     methods: {
         RegSubmit() {
             if (this.Step === 'Number') {
-                this.$refs.HiddenFormSubmitReg.click()
-                this.Step = 'Code'
-                this.EnteredNumber = this.RegInput
-                this.RegInput = ''
+                const formData = new FormData();
+                formData.append('phone_number', this.RegInput);
+                formData.append('name', this.Name);
+                formData.append('csrfmiddlewaretoken', csrfToken);
+                const response = fetch(registerUrl, {
+                    method: 'POST',
+                    body: formData
+
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw new Error(errorData.detail || 'Ошибка при регистрации');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.errors) {
+                        document.getElementById('NameError').innerText = data.errors;
+
+                    }else {
+                        this.Step = 'Code';
+                        this.EnteredNumber = this.RegInput;
+                        this.RegInput = '';
+                        alert(data.code);
+                    }
+
+
+                })
+                .catch(error => {
+                    this.errorMessage = 'Ошибка при регистрации: ' + error.message;
+                });
+            }
+            else if (this.Step === 'Code') {
+                alert("Подтверждение PIN-кода")
+                const formData = new FormData();
+                formData.append('pin', this.RegInput); // Отправляем PIN-код
+                formData.append('csrfmiddlewaretoken', csrfToken);
+                const response = fetch(registerUrl, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                        throw new Error(errorData.detail || 'Ошибка при подтверждении PIN-кода');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Вход успешен:', data);
+                    this.Step = 'Finish';
+                    this.RegInput = 'Регистрация успешна';
+
+                })
+                .catch(error => {
+                    this.errorMessage = 'Ошибка при подтверждении PIN-кода: ' + error.message;
+                });
             }
             else {
-                this.$refs.HiddenFormSubmitReg.click()
-                this.Step = 'Finish'
-                this.RegInput = 'Регистрация успешна'
+                this.Reset()
             }
         },
         ToRegStep1() {
@@ -62,6 +118,7 @@ Vue.createApp({
         Reset() {
             this.Step = 'Number'
             this.RegInput = ''
+            this.Name = ''
             EnteredNumber = ''
         }
     }

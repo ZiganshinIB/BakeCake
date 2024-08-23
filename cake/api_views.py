@@ -183,7 +183,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         elif self.action == 'create':
             return [permissions.IsAuthenticated()]
         elif self.action == 'update' or self.action == 'partial_update':
-            return [IsOwnerOrReadOnly(), CanUpdateOrder()]
+            return [CanUpdateOrder()]
         elif self.action == 'destroy':
             return [CanDeleteOrder()]
         else:
