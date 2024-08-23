@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Client, Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, Order
+from .models import Client, Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, Order, CakeDecor
 
 
 @admin.register(Client)
@@ -37,6 +37,12 @@ class CakeToppingAdmin(admin.ModelAdmin):
 class CakeBerryAdmin(admin.ModelAdmin):
     list_display = ("cake_berry", "price")
     ordering = ["cake_berry"]
+
+
+@admin.register(CakeDecor)
+class CakeDecorAdmin(admin.ModelAdmin):
+    list_display = ("cake_decor", "price")
+    ordering = ["cake_decor"]
 
 
 @admin.register(Order)

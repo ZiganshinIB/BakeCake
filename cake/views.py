@@ -5,8 +5,9 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView, ListView
 
+
 from .forms import PhoneForm, PinForm, ClientEditForm
-from .models import Cake, Client
+from .models import Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, CakeDecor
 from .utils import get_code
 
 
@@ -19,6 +20,11 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная'
+        context['levels'] = CakeLevel.objects.all()
+        context['shapes'] = CakeShape.objects.all()
+        context['toppings'] = CakeTopping.objects.all()
+        context['berries'] = CakeBerry.objects.all()
+        context['decors'] = CakeDecor.objects.all()
         return context
 
 # TODO: Список тортов

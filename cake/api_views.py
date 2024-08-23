@@ -3,15 +3,38 @@ from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
+from rest_framework import status
+from rest_framework.views import APIView
 
 from django.db.models import Q
 
 from .models import Cake, CakeLevel, Order, CakeShape, CakeTopping, CakeDecor, CakeBerry
-from .serializers import CakeSerializer, CakeLevelSerializer, OrderSerializer
+from .serializers import CakeSerializer, CakeLevelSerializer, OrderSerializer, CakePriceRequestSerializer
 from .permissions import IsOwnerOrReadOnly, CanUpdateCake, CanDeleteCake, CanUpdateCakeLevel, CanCreateCakeLevel, \
     CanCreateCakeShape, CanUpdateCakeShape, CanCreateCakeTopping, CanDeleteCakeLevel, CanDeleteCakeShape, \
     CanDeleteCakeTopping, CanUpdateCakeTopping, CanCreateCakeBerry, CanUpdateCakeBerry, CanDeleteCakeBerry, \
     CanUpdateOrder, CanDeleteOrder, CanCreateCakeDecor, CanUpdateCakeDecor, CanDeleteCakeDecor, IsOwner
+
+
+class CalculateCakePriceApiView(APIView):
+    def post(self, request, **kwargs):
+        print(request)
+        serializer = CakePriceRequestSerializer(data=request.data)
+        print(serializer)
+        if serializer.is_valid(raise_exception=True):
+            cake_params = serializer.validated_data
+            cake_price = 0
+            level = CakeLevel.objects.get(id=cake_params['level_id'])
+            cake_price += level.price
+            shape = CakeShape.objects.get(id=cake_params['shape_id'])
+            cake_price += shape.price
+            topping = CakeTopping.objects.get(id=cake_params['topping_id'])
+            cake_price += topping.price
+            berry = CakeBerry.objects.get(id=cake_params['berry_id'])
+            cake_price += berry.price
+            decor = CakeDecor.objects.get(id=cake_params['decor_id'])
+            cake_price += decor.price
+            return Response(status=status.HTTP_200_OK, data={"price": cake_price})
 
 
 class CakeViewSet(viewsets.ModelViewSet):

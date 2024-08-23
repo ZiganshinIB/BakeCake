@@ -99,18 +99,8 @@ Vue.createApp({
                 }
             },
             DATA: {
-                Levels: ['не выбрано', '1', '2', '3'],
-                Forms: ['не выбрано', 'Круг', 'Квадрат', 'Прямоугольник'],
-                Toppings: ['не выбрано', 'Без', 'Белый соус', 'Карамельный', 'Кленовый', 'Черничный', 'Молочный шоколад', 'Клубничный'],
-                Berries: ['нет', 'Ежевика', 'Малина', 'Голубика', 'Клубника'],
-                Decors: [ 'нет', 'Фисташки', 'Безе', 'Фундук', 'Пекан', 'Маршмеллоу', 'Марципан']
             },
             Costs: {
-                Levels: [0, 400, 750, 1100],
-                Forms: [0, 600, 400, 1000],
-                Toppings: [0, 0, 200, 180, 200, 300, 350, 200],
-                Berries: [0, 400, 300, 450, 500],
-                Decors: [0, 300, 400, 350, 300, 200, 280],
                 Words: 500
             },
             Levels: 0,
@@ -137,7 +127,7 @@ Vue.createApp({
             setTimeout(() => this.$refs.ToStep4.click(), 0);
         }
     },
-    computed: {
+    /*computed: {
         Cost() {
             let W = this.Words ? this.Costs.Words : 0
             return this.Costs.Levels[this.Levels] + this.Costs.Forms[this.Form] +
@@ -145,4 +135,4 @@ Vue.createApp({
                 this.Costs.Decors[this.Decor] + W
         }
     }
-}).mount('#VueApp')
+}).mount('#VueApp')*/
