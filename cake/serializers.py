@@ -12,11 +12,11 @@ class ClientRegistrationSerializer(BaseUserRegistrationSerializer):
 
 
 class CakePriceRequestSerializer(serializers.Serializer):
-    level_id = serializers.IntegerField(required=True)
-    shape_id = serializers.IntegerField(required=True)
-    topping_id = serializers.IntegerField(required=True)
-    berry_id = serializers.IntegerField(required=True)
-    decor_id = serializers.IntegerField(required=True)
+    level_id = serializers.CharField(required=True)
+    shape_id = serializers.CharField(required=True)
+    topping_id = serializers.CharField(required=True)
+    berry_id = serializers.CharField(required=False, allow_null=True)
+    decor_id = serializers.CharField(required=False, allow_null=True)
 
 
 class CakeSerializer(serializers.ModelSerializer):
