@@ -227,19 +227,15 @@
 							<div class="col-12 col-lg-4 d-flex justify-content-center justify-content-lg-end">
 								<div class="cake__card p-4 position-relative cake_grey">
 									<span class="cake__badge rounded-pill">?</span>
-									<span>Количество уровней: {{ cake.level_count }}</span>
-									<span>Форма уровней: {{ cake.shape }}</span>
-									<p>Топинг: {{ cake.topping }}</p>
+									{% verbatim %}
+									<span>Количество уровней: {{ Cake.level }}</span>
+									<span>Форма уровней: {{ Cake.shape }}</span>
+									<p>Топинг: {{ Cake.topping }}</p>
 									<span>Дополнительно:</span>
 									<ul>
-										{% if cake.berry %}
-											<li>Ягоды: {{ cake.berry }}</li>
-										{% endif %}
-										{% if cake.decor %}
-											<li>Декор: {{ cake.decor }}</li>
-										{% endif %}
+										<li>Ягоды: {{ Cake.berry }}</li>
+										<li>Декор: {{ Cake.decor }}</li>
 									</ul>
-									{% verbatim %}
 									<span>{{ Words === '' ? 'Без надписи' : Words }}</span>
 									{% endverbatim %}
 								</div>

@@ -16,6 +16,15 @@ from .permissions import IsOwnerOrReadOnly, CanUpdateCake, CanDeleteCake, CanUpd
     CanUpdateOrder, CanDeleteOrder, CanCreateCakeDecor, CanUpdateCakeDecor, CanDeleteCakeDecor, IsOwner
 
 
+class CakeApiView(APIView):
+    def post(self, request, **kwargs):
+        serializer = CakeSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.create(serializer.validated_data)
+            cake = serializer.data
+            return Response(status=status.HTTP_200_OK, data={"cake": cake})
+
+
 class CalculateCakePriceApiView(APIView):
     def post(self, request, **kwargs):
         serializer = CakePriceRequestSerializer(data=request.data)
@@ -94,6 +103,7 @@ class CakeLevelViewSet(viewsets.ModelViewSet):
             return [CanDeleteCakeLevel()]
         else:
             return [permissions.IsAuthenticated()]
+
 
 class CakeShapeViewSet(viewsets.ModelViewSet):
     queryset = CakeShape.objects.all()

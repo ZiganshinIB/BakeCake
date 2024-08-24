@@ -9,19 +9,19 @@ Vue.createApp({
         return {
             schema1: {
                 lvls: (value) => {
-                    if (value) {
+                    if (this.Levels) {
                         return true;
                     }
                     return ' количество уровней';
                 },
-                form: (value) => {
-                    if (value) {
+                form: (value ) => {
+                    if (this.Form) {
                         return true;
                     }
                     return ' форму торта';
                 },
                 topping: (value) => {
-                    if (value) {
+                    if (this.Topping) {
                         return true;
                     }
                     return ' топпинг';
@@ -152,6 +152,28 @@ Vue.createApp({
                 }
             });
             return price;
+        },
+        Cake() {
+            let requestBody = {
+                title: "Торт",
+                level: this.Levels,
+                shape: this.Form,
+                topping: this.Topping,
+                berry: this.Berries,
+                decor: this.Decor,
+            };
+
+            const request = $.ajax({
+                url: '/api/v1/cake/',
+                type: 'POST',
+                data: JSON.stringify(requestBody),
+                contentType: "application/json",
+                async: false,
+                success: function (data) {
+                    cake = data.cake;
+                }
+            });
+            return cake;
         }
     }
 }).mount('#VueApp')
