@@ -17,12 +17,36 @@ from .permissions import IsOwnerOrReadOnly, CanUpdateCake, CanDeleteCake, CanUpd
 
 
 class CakeApiView(APIView):
+    '''
     def post(self, request, **kwargs):
         serializer = CakeSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.create(serializer.validated_data)
             cake = serializer.data
             return Response(status=status.HTTP_200_OK, data={"cake": cake})
+    '''
+
+    def get(self, request, **kwargs):
+        cake_detail = {'label': 'Без надписи'}
+        params = request.query_params
+        if 'level_id' in params:
+            level = CakeLevel.objects.get(id=params['level_id'])
+            cake_detail.update({'level': level.level_count})
+        if 'shape_id' in params:
+            shape = CakeShape.objects.get(id=params['shape_id'])
+            cake_detail.update({'shape': shape.shape})
+        if 'topping_id' in params:
+            topping = CakeTopping.objects.get(id=params['topping_id'])
+            cake_detail.update({'topping': topping.cake_topping})
+        if 'berry_id' in params:
+            berry = CakeBerry.objects.get(id=params['berry_id'])
+            cake_detail.update({'berry': berry.cake_berry})
+        if 'decor_id' in params:
+            decor = CakeDecor.objects.get(id=params['decor_id'])
+            cake_detail.update({'decor': decor.cake_decor})
+        if 'label' in params:
+            cake_detail['label'] = params['label']
+        return Response(status=status.HTTP_200_OK, data=cake_detail)
 
 
 class CalculateCakePriceApiView(APIView):

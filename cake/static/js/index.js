@@ -155,22 +155,31 @@ Vue.createApp({
         },
         Cake() {
             let requestBody = {
-                title: "Торт",
-                level: this.Levels,
-                shape: this.Form,
-                topping: this.Topping,
-                berry: this.Berries,
-                decor: this.Decor,
+                level_id: this.Levels,
+                shape_id: this.Form,
+                topping_id: this.Topping
             };
+
+            if (this.Berries) {
+                requestBody.berry_id = this.Berries;
+            }
+
+            if (this.Decor) {
+                requestBody.decor_id = this.Decor;
+            }
+
+            if (this.Words) {
+                requestBody.label = this.Words;
+            }
 
             const request = $.ajax({
                 url: '/api/v1/cake/',
-                type: 'POST',
-                data: JSON.stringify(requestBody),
+                type: 'GET',
+                data: requestBody,
                 contentType: "application/json",
                 async: false,
                 success: function (data) {
-                    cake = data.cake;
+                    cake = data;
                 }
             });
             return cake;
