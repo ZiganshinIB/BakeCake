@@ -40,7 +40,10 @@ touch .env
 Основые переменные:
 ```text
 DJANGO_SECRET_KEY='django_secret_key'              # секретный ключ django проекта
+TLY_API_TOKEN                                      # Ключ для работы с ссылками для рекламам 
 ```
+Как работать с получить ключ TLY_API_TOKEN [читать тут](https://t.ly/docs)
+
 Опцианальные:
 ```shell
 DJANGO_DEBUG=true                                 # отладочный режим
