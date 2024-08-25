@@ -26,24 +26,25 @@ class IndexView(TemplateView):
         return context
 
 
-# TODO: Список тортов
-class CakeListView(ListView):
+class CakeCatalogView(ListView):
     model = Cake
-    template_name = 'cake/cake_list.html'
-    context_object_name = 'cakes'
-
-
-class ProfileView(LoginRequiredMixin, TemplateView):
-    template_name = 'cake/lk-order.html'  # Укажите путь к вашему шаблону
+    template_name = 'cake/catalog.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user  # Получаем текущего пользователя
+        context['cakes'] = Cake.objects.filter(is_published=True)
+        return context
 
-        # Получаем объект пользователя (или клиента)
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'cake/lk-order.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
         client = get_object_or_404(Client, phone_number=user.phone_number)
 
-        # Добавляем данные клиента в контекст
         context['title'] = 'Личный кабинет'
         return context
 
