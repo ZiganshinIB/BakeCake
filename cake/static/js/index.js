@@ -107,8 +107,8 @@ Vue.createApp({
             Topping: null,
             Berries: null,
             Decor: null,
-            Words: '',
-            Comments: '',
+            Words: null,
+            Comments: null,
             Designed: false,
 
             Name: '',
@@ -117,7 +117,7 @@ Vue.createApp({
             Address: null,
             Dates: null,
             Time: null,
-            DelivComments: ''
+            DelivComments: null
         }
     },
     methods: {
@@ -125,6 +125,52 @@ Vue.createApp({
             console.log('step4')
             this.Designed = true
             setTimeout(() => this.$refs.ToStep4.click(), 0);
+        },
+        ToPay() {
+            console.log('PAYMENT');
+
+            let requestBody = {
+                price: this.Cost,
+                cake: {
+                    level_id: this.Levels,
+                    shape_id: this.Form,
+                    topping_id: this.Topping,
+                    berry_id: this.Berries,
+                    decor_id: this.Decor
+                },
+                client: {
+                    name: this.Name,
+                    phone_number: this.Phone,
+                    email: this.Email,
+                    password: "11tryry5646451"
+                },
+                address: this.Address,
+                delivery_date: this.Dates,
+                delivered_at: this.Dates + ' ' + this.Time,
+            };
+            if (this.DelivComments) {
+                requestBody.delivery_comments = this.DelivComments;
+            }
+
+            if (this.Comments) {
+                requestBody.comment = this.Comments;
+            }
+
+            if (this.Words) {
+                requestBody.inscription = this.Words;
+            }
+
+            const request = $.ajax({
+                url: '/api/v1/order/',
+                type: 'POST',
+                data: JSON.stringify(requestBody),
+                contentType: "application/json",
+                async: false,
+                success: function (data) {
+                    order = data;
+                }
+            });
+            return order;
         }
     },
     computed: {
@@ -155,22 +201,31 @@ Vue.createApp({
         },
         Cake() {
             let requestBody = {
-                title: "Торт",
-                level: this.Levels,
-                shape: this.Form,
-                topping: this.Topping,
-                berry: this.Berries,
-                decor: this.Decor,
+                level_id: this.Levels,
+                shape_id: this.Form,
+                topping_id: this.Topping
             };
+
+            if (this.Berries) {
+                requestBody.berry_id = this.Berries;
+            }
+
+            if (this.Decor) {
+                requestBody.decor_id = this.Decor;
+            }
+
+            if (this.Words) {
+                requestBody.label = this.Words;
+            }
 
             const request = $.ajax({
                 url: '/api/v1/cake/',
-                type: 'POST',
-                data: JSON.stringify(requestBody),
+                type: 'GET',
+                data: requestBody,
                 contentType: "application/json",
                 async: false,
                 success: function (data) {
-                    cake = data.cake;
+                    cake = data;
                 }
             });
             return cake;
