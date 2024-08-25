@@ -136,9 +136,7 @@ Vue.createApp({
                     shape_id: this.Form,
                     topping_id: this.Topping,
                     berry_id: this.Berries,
-                    decor_id: this.Decor,
-                    inscription: this.Words,
-                    comment: this.Comments
+                    decor_id: this.Decor
                 },
                 client: {
                     name: this.Name,
@@ -149,8 +147,18 @@ Vue.createApp({
                 address: this.Address,
                 delivery_date: this.Dates,
                 delivered_at: this.Dates + ' ' + this.Time,
-                delivery_comments: this.DelivComments
             };
+            if (this.DelivComments) {
+                requestBody.delivery_comments = this.DelivComments;
+            }
+
+            if (this.Comments) {
+                requestBody.comment = this.Comments;
+            }
+
+            if (this.Words) {
+                requestBody.inscription = this.Words;
+            }
 
             const request = $.ajax({
                 url: '/api/v1/order/',

@@ -37,14 +37,14 @@ class OrderApiView(APIView):
                 decor = CakeDecor.objects.get(id=order_params['cake']['decor_id'])
             else:
                 decor = None
-            if 'inscription' in order_params['cake']:
-                inscription = order_params['cake']['inscription']
+            if 'inscription' in order_params:
+                inscription = order_params['inscription']
             else:
-                inscription = " "
-            if 'comment' in order_params['cake']:
-                comment = order_params['cake']['comment']
+                inscription = ""
+            if 'comment' in order_params:
+                comment = order_params['comment']
             else:
-                comment = " "
+                comment = ""
             cake = Cake.objects.create(
                 title='Торт',
                 level=CakeLevel.objects.get(id=order_params['cake']['level_id']),
@@ -59,8 +59,8 @@ class OrderApiView(APIView):
             if 'delivery_comments' in order_params:
                 delivery_comments = order_params['delivery_comments']
             else:
-                delivery_comments = " "
-            order = Order.objects.create(
+                delivery_comments = ""
+            Order.objects.create(
                 customer=Client.objects.get(id=client.id),
                 cake=Cake.objects.get(id=cake.id),
                 price=order_params['price'],
@@ -69,7 +69,7 @@ class OrderApiView(APIView):
                 delivered_at=order_params['delivered_at'],
                 delivery_comments=delivery_comments
             )
-            return Response(status=status.HTTP_200_OK, data={"order": order.id})
+            return Response(status=status.HTTP_200_OK, data={"order": serializer.validated_data})
 
 
 class CakeApiView(APIView):

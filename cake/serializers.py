@@ -73,6 +73,8 @@ class CakeDecorSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     client = ClientRegistrationSerializer()
     cake = CakePriceRequestSerializer()
+    inscription = serializers.CharField(required=False, allow_null=True)
+    comment = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = Order
@@ -88,6 +90,8 @@ class OrderSerializer(serializers.ModelSerializer):
             'delivery_date',
             'delivered_at',
             'delivery_comments',
+            'inscription',
+            'comment'
         ]
         read_only_fields = ['registered_at']
 
