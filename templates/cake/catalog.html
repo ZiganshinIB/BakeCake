@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <main>
+        <div class="container mt-header">
+            <article class="row pt-header d-flex justify-content-center" id="step2">
+                <h2 class="font_Gogh fs_40 cake_blue text-center mb-3">Каталог тортов</h2>
+                {% for cake in cakes %}
+                    <div class="col-12 col-sm-6 col-lg-4 d-flex flex-column align-items-center">
+					    <div class="card border-0 cake__hover">
+                            <a href="#" class="card-img-overlay"></a>
+                            <img src="{{ cake.image.url}}" style="max-height: 200px; max-width: 300px;"  alt="cake" class="">
+                            <span class="cake_blue mt-4 fw-lighter mb-4 text-center">{{ cake.title }}</span>
+                            <span>Количество уровней: {{ cake.level }}</span>
+                            <span>Форма уровней: {{ cake.shape }}</span>
+                            <p>Топинг: {{ cake.topping }}</p>
+                            <span>Дополнительно:</span>
+                            <ul>
+                                {% if cake.berry %}
+                                    <li>Ягода: {{ cake.berry }}</li>
+                                {% endif %}
+                                {% if cake.decor %}
+                                    <li>Декор: {{ cake.decor }}</li>
+                                {% endif %}
+                            </ul>
+                            <p>Цена: {{ cake.price }}₽</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="d-flex justify-content-center mt-2">
+				    <a href="{% url 'index' %}"><button class="btn text-white rounded-pill shadow-none cake__button cake__bg_pink">Назад</button></a>
+			    </div>
+
+            </article>
+        </div>
+    </main>
+{% endblock %}

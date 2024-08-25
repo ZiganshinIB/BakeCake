@@ -12,6 +12,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from .managers import ClientManager
 
+
 class CakeLevel(models.Model):
     level_count = models.IntegerField(
         verbose_name='Количество уровней',
@@ -162,6 +163,18 @@ class Cake(models.Model):
         verbose_name='Комментарий',
         blank=True
     )
+    image = models.ImageField(
+        verbose_name='Изображение',
+        blank=True,
+        null=True
+    )
+    price = models.DecimalField(
+        verbose_name='Стоимость',
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True
+    )
 
     class Meta:
         verbose_name = 'Торт'
@@ -169,6 +182,7 @@ class Cake(models.Model):
 
     def __str__(self):
         return "{} уровень {}".format(self.title, self.level.level_count)
+
 
 class Order(models.Model):
     STATUS = (
@@ -253,6 +267,7 @@ class Order(models.Model):
     def __str__(self):
         return f'{self.customer}: {self.registered_at}'
 
+
 class Pay(models.Model):
     _TYPE = (
         ('tips', "Чаевые"),
@@ -271,6 +286,7 @@ class Pay(models.Model):
     def __str__(self):
         return f"Платеж {self.operation_id}"
 
+
 class Advertising(models.Model):
     url = models.URLField('Ссылка', blank=True)
     text = models.TextField('Текст рекламы')
@@ -284,6 +300,7 @@ class Advertising(models.Model):
     class Meta:
         verbose_name = 'Реклама'
         verbose_name_plural = 'Реклама'
+
 
 class Client(AbstractBaseUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
