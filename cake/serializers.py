@@ -1,6 +1,6 @@
 from djoser.serializers import UserCreateSerializer as BaseUserRegistrationSerializer
 from rest_framework import serializers
-from .models import Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, CakeDecor, Order
+from .models import Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, CakeDecor, Order, Client
 
 
 class ClientRegistrationSerializer(BaseUserRegistrationSerializer):
@@ -71,10 +71,13 @@ class CakeDecorSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    client = ClientRegistrationSerializer()
+    cake = CakePriceRequestSerializer()
+
     class Meta:
         model = Order
         fields = [
-            'customer',
+            'client',
             'cake',
             'status',
             'status_pay',

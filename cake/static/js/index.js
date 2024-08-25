@@ -125,6 +125,10 @@ Vue.createApp({
             console.log('step4')
             this.Designed = true
             setTimeout(() => this.$refs.ToStep4.click(), 0);
+        },
+        ToPay() {
+            console.log('PAYMENT');
+            // написать код для отправки запроса оформления заказа
         }
     },
     computed: {

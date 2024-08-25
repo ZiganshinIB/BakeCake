@@ -5,10 +5,11 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework import status
 from rest_framework.views import APIView
+from django.utils import timezone
 
 from django.db.models import Q
 
-from .models import Cake, CakeLevel, Order, CakeShape, CakeTopping, CakeDecor, CakeBerry
+from .models import Cake, CakeLevel, Order, CakeShape, CakeTopping, CakeDecor, CakeBerry, Client
 from .serializers import CakeSerializer, CakeLevelSerializer, OrderSerializer, CakePriceRequestSerializer
 from .permissions import IsOwnerOrReadOnly, CanUpdateCake, CanDeleteCake, CanUpdateCakeLevel, CanCreateCakeLevel, \
     CanCreateCakeShape, CanUpdateCakeShape, CanCreateCakeTopping, CanDeleteCakeLevel, CanDeleteCakeShape, \
@@ -16,15 +17,52 @@ from .permissions import IsOwnerOrReadOnly, CanUpdateCake, CanDeleteCake, CanUpd
     CanUpdateOrder, CanDeleteOrder, CanCreateCakeDecor, CanUpdateCakeDecor, CanDeleteCakeDecor, IsOwner
 
 
-class CakeApiView(APIView):
-    '''
+class OrderApiView(APIView):
+
     def post(self, request, **kwargs):
-        serializer = CakeSerializer(data=request.data)
+        serializer = OrderSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.create(serializer.validated_data)
-            cake = serializer.data
-            return Response(status=status.HTTP_200_OK, data={"cake": cake})
-    '''
+            order_params = serializer.validated_data
+            client = Client.objects.create(
+                name=order_params['client']['name'],
+                phone_number=order_params['client']['phone_number'],
+                email=order_params['client']['email'],
+                password=order_params['client']['password'],
+            )
+            if 'berry_id' in order_params['cake']:
+                berry = CakeBerry.objects.get(id=order_params['cake']['berry_id'])
+            else:
+                berry = None
+            if 'decor_id' in order_params['cake']:
+                decor = CakeDecor.objects.get(id=order_params['cake']['decor_id'])
+            else:
+                decor = None
+            cake = Cake.objects.create(
+                title='Торт',
+                level=CakeLevel.objects.get(id=order_params['cake']['level_id']),
+                shape=CakeShape.objects.get(id=order_params['cake']['shape_id']),
+                topping=CakeTopping.objects.get(id=order_params['cake']['topping_id']),
+                berry=berry,
+                decor=decor,
+                is_published=False
+            )
+            if 'delivery_comments' in order_params:
+                comment = order_params['delivery_comments']
+            else:
+                comment = " "
+            order = Order.objects.create(
+                customer=Client.objects.get(id=client.id),
+                cake=Cake.objects.get(id=cake.id),
+                price=order_params['price'],
+                address=order_params['address'],
+                delivery_date=order_params['delivery_date'],
+                delivered_at=order_params['delivered_at'],
+                delivery_comments=comment
+            )
+            return Response(status=status.HTTP_200_OK, data={"order": order.id})
+
+
+class CakeApiView(APIView):
 
     def get(self, request, **kwargs):
         cake_detail = {'label': 'Без надписи'}

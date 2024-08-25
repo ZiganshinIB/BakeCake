@@ -190,7 +190,7 @@
 					<input v-model="DelivComments" type="text" name="DELIVCOMMENTS">
 					<button type="submit" ref="HiddenFormSubmit">Submit Order</button>
 				</form>
-				<v-form :validation-schema="schema2" @submit="this.$refs.HiddenFormSubmit.click()">
+				<v-form :validation-schema="schema2" @submit="ToPay">
 					<div class="col">
 						<div class="d-flex flex-column position-relative pb-5">
 							<h2 class="fs_40 font_Gogh cake_blue text-center align-self-center">Оформление заказа</h2>
@@ -270,7 +270,9 @@
 							</div>
 							<div class="col-12 col-md-6 d-flex flex-column align-items-center align-items-md-end mt-3 mt-md-0">
 								<div class="d-flex">
+									{% verbatim %}
 									<span class="cake_pink fs_40 fw-bold me-2">Итого: {{ Cost }}₽</span>
+									{% endverbatim %}
 								</div>
 								<button type="submit" class="btn btn_hover text-white rounded-pill mt-3 px-5 shadow-none cake__button cake__bg_pink">К оплате</button>
 							</div>

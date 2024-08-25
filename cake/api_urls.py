@@ -1,7 +1,7 @@
 from django.urls import include, path
 
 from .api_views import CakeViewSet, CakeLevelViewSet, CakeShapeViewSet, CakeToppingViewSet, CakeBerryViewSet, \
-    CakeDecorViewSet, OrderViewSet, CalculateCakePriceApiView, CakeApiView
+    CakeDecorViewSet, OrderViewSet, CalculateCakePriceApiView, CakeApiView, OrderApiView
 
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
@@ -19,5 +19,6 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('', include(router.urls)),
     path('calc/', CalculateCakePriceApiView.as_view()),
-    path('cake/', CakeApiView.as_view())
+    path('cake/', CakeApiView.as_view()),
+    path('order/', OrderApiView.as_view())
 ]
