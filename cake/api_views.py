@@ -16,11 +16,18 @@ from .permissions import IsOwnerOrReadOnly, CanUpdateCake, CanDeleteCake, CanUpd
     CanUpdateOrder, CanDeleteOrder, CanCreateCakeDecor, CanUpdateCakeDecor, CanDeleteCakeDecor, IsOwner
 
 
+class CakeApiView(APIView):
+    def post(self, request, **kwargs):
+        serializer = CakeSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.create(serializer.validated_data)
+            cake = serializer.data
+            return Response(status=status.HTTP_200_OK, data={"cake": cake})
+
+
 class CalculateCakePriceApiView(APIView):
     def post(self, request, **kwargs):
-        print(request)
         serializer = CakePriceRequestSerializer(data=request.data)
-        print(serializer)
         if serializer.is_valid(raise_exception=True):
             cake_params = serializer.validated_data
             cake_price = 0
@@ -30,10 +37,12 @@ class CalculateCakePriceApiView(APIView):
             cake_price += shape.price
             topping = CakeTopping.objects.get(id=cake_params['topping_id'])
             cake_price += topping.price
-            berry = CakeBerry.objects.get(id=cake_params['berry_id'])
-            cake_price += berry.price
-            decor = CakeDecor.objects.get(id=cake_params['decor_id'])
-            cake_price += decor.price
+            if cake_params.get('berry_id'):
+                berry = CakeBerry.objects.get(id=cake_params['berry_id'])
+                cake_price += berry.price
+            if cake_params.get('decor_id'):
+                decor = CakeDecor.objects.get(id=cake_params['decor_id'])
+                cake_price += decor.price
             return Response(status=status.HTTP_200_OK, data={"price": cake_price})
 
 
@@ -94,6 +103,7 @@ class CakeLevelViewSet(viewsets.ModelViewSet):
             return [CanDeleteCakeLevel()]
         else:
             return [permissions.IsAuthenticated()]
+
 
 class CakeShapeViewSet(viewsets.ModelViewSet):
     queryset = CakeShape.objects.all()

@@ -101,7 +101,7 @@
 					<div class="d-flex align-items-center flex-wrap mb-3">
 						<span class="me-3 fs_40 cake_blue">Количество уровней</span>
 						{% for level in levels %}
-							<v-field v-model="Levels" type="radio"  id="num{{ level.id }}" value="{{ level.id }}" class="d-none cake__input"></v-field>
+							<v-field v-model="Levels" type="radio" name="level"  id="num{{ level.id }}" value="{{ level.id }}" class="d-none cake__input"></v-field>
 							<label for="num{{ level.id }}" class="mx-2 px-3 py-1 cake_grey cake__label">{{ level.level_count }}</label>
 						{% endfor %}
 					</div>
@@ -227,19 +227,15 @@
 							<div class="col-12 col-lg-4 d-flex justify-content-center justify-content-lg-end">
 								<div class="cake__card p-4 position-relative cake_grey">
 									<span class="cake__badge rounded-pill">?</span>
-									<span>Количество уровней: {{ cake.level_count }}</span>
-									<span>Форма уровней: {{ cake.shape }}</span>
-									<p>Топинг: {{ cake.topping }}</p>
+									{% verbatim %}
+									<span>Количество уровней: {{ Cake.level }}</span>
+									<span>Форма уровней: {{ Cake.shape }}</span>
+									<p>Топинг: {{ Cake.topping }}</p>
 									<span>Дополнительно:</span>
 									<ul>
-										{% if cake.berry %}
-											<li>Ягоды: {{ cake.berry }}</li>
-										{% endif %}
-										{% if cake.decor %}
-											<li>Декор: {{ cake.decor }}</li>
-										{% endif %}
+										<li>Ягоды: {{ Cake.berry }}</li>
+										<li>Декор: {{ Cake.decor }}</li>
 									</ul>
-									{% verbatim %}
 									<span>{{ Words === '' ? 'Без надписи' : Words }}</span>
 									{% endverbatim %}
 								</div>
@@ -292,32 +288,8 @@
 
 {% block js_file %}
 <script src="{% static 'js/index.js' %}"></script>
-
 <script src="{% static 'js/registration.js' %}"></script>
 {% block javascript %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-	$(document).ready(function () {
-		// catch the form's change event
-		$("form :input").change(function() {
-
-			// create an AJAX call
-			$.ajax({
-				data: $(this).serialize(), // get the form data
-				url: "{% url 'api/v1/calc/' %}",
-				// on success
-				success: function (response) {
-					$('#cost').text(response.price);
-				},
-				// on error
-				error: function (response) {
-					// alert the error if any error occured
-					console.log(response.responseJSON.errors)
-				}
-			});
-			return false;
-		});
-	})
-</script>
 {% endblock javascript %}
 {% endblock %}

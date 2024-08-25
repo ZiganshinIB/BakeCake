@@ -7,7 +7,7 @@ from django.views.generic import TemplateView, ListView
 
 
 from .forms import PhoneForm, PinForm, ClientEditForm
-from .models import Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, CakeDecor
+from .models import Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, CakeDecor, Client
 from .utils import get_code
 
 
@@ -20,11 +20,11 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная'
-        context['levels'] = CakeLevel.objects.all()
-        context['shapes'] = CakeShape.objects.all()
-        context['toppings'] = CakeTopping.objects.all()
-        context['berries'] = CakeBerry.objects.all()
-        context['decors'] = CakeDecor.objects.all()
+        context['levels'] = CakeLevel.objects.all().order_by('price')
+        context['shapes'] = CakeShape.objects.all().order_by('price')
+        context['toppings'] = CakeTopping.objects.all().order_by('price')
+        context['berries'] = CakeBerry.objects.all().order_by('price')
+        context['decors'] = CakeDecor.objects.all().order_by('price')
         return context
 
 # TODO: Список тортов

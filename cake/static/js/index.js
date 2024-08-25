@@ -9,19 +9,19 @@ Vue.createApp({
         return {
             schema1: {
                 lvls: (value) => {
-                    if (value) {
+                    if (this.Levels) {
                         return true;
                     }
                     return ' количество уровней';
                 },
-                form: (value) => {
-                    if (value) {
+                form: (value ) => {
+                    if (this.Form) {
                         return true;
                     }
                     return ' форму торта';
                 },
                 topping: (value) => {
-                    if (value) {
+                    if (this.Topping) {
                         return true;
                     }
                     return ' топпинг';
@@ -45,7 +45,7 @@ Vue.createApp({
                     if (!value) {
                         return true;
                     }
-                    if ( !regex.test(value)) {
+                    if (!regex.test(value)) {
 
                         return '⚠ Формат имени нарушен';
                     }
@@ -56,18 +56,18 @@ Vue.createApp({
                     if (!value) {
                         return true;
                     }
-                    if ( !regex.test(value)) {
+                    if (!regex.test(value)) {
 
                         return '⚠ Формат почты нарушен';
                     }
                     return true;
                 },
-                phone_format:(value) => {
+                phone_format: (value) => {
                     const regex = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/
                     if (!value) {
                         return true;
                     }
-                    if ( !regex.test(value)) {
+                    if (!regex.test(value)) {
 
                         return '⚠ Формат телефона нарушен';
                     }
@@ -98,16 +98,15 @@ Vue.createApp({
                     return ' время доставки';
                 }
             },
-            DATA: {
-            },
+            DATA: {},
             Costs: {
-                Words: 500
+                Words: 0
             },
-            Levels: 0,
-            Form: 0,
-            Topping: 0,
-            Berries: 0,
-            Decor: 0,
+            Levels: null,
+            Form: null,
+            Topping: null,
+            Berries: null,
+            Decor: null,
             Words: '',
             Comments: '',
             Designed: false,
@@ -123,16 +122,58 @@ Vue.createApp({
     },
     methods: {
         ToStep4() {
+            console.log('step4')
             this.Designed = true
             setTimeout(() => this.$refs.ToStep4.click(), 0);
         }
     },
-    /*computed: {
+    computed: {
         Cost() {
-            let W = this.Words ? this.Costs.Words : 0
-            return this.Costs.Levels[this.Levels] + this.Costs.Forms[this.Form] +
-                this.Costs.Toppings[this.Topping] + this.Costs.Berries[this.Berries] +
-                this.Costs.Decors[this.Decor] + W
+            let price = 0;
+            if (!this.Levels || !this.Form || !this.Topping) {
+                return 0;
+            }
+            let requestBody = {
+                level_id: this.Levels,
+                shape_id: this.Form,
+                topping_id: this.Topping,
+                berry_id: this.Berries,
+                decor_id: this.Decor,
+            };
+
+            const request = $.ajax({
+                url: '/api/v1/calc/',
+                type: 'POST',
+                data: JSON.stringify(requestBody),
+                contentType: "application/json",
+                async: false,
+                success: function (data) {
+                    price = data.price;
+                }
+            });
+            return price;
+        },
+        Cake() {
+            let requestBody = {
+                title: "Торт",
+                level: this.Levels,
+                shape: this.Form,
+                topping: this.Topping,
+                berry: this.Berries,
+                decor: this.Decor,
+            };
+
+            const request = $.ajax({
+                url: '/api/v1/cake/',
+                type: 'POST',
+                data: JSON.stringify(requestBody),
+                contentType: "application/json",
+                async: false,
+                success: function (data) {
+                    cake = data.cake;
+                }
+            });
+            return cake;
         }
     }
-}).mount('#VueApp')*/
+}).mount('#VueApp')

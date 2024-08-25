@@ -12,11 +12,11 @@ class ClientRegistrationSerializer(BaseUserRegistrationSerializer):
 
 
 class CakePriceRequestSerializer(serializers.Serializer):
-    level_id = serializers.IntegerField(required=True)
-    shape_id = serializers.IntegerField(required=True)
-    topping_id = serializers.IntegerField(required=True)
-    berry_id = serializers.IntegerField(required=True)
-    decor_id = serializers.IntegerField(required=True)
+    level_id = serializers.CharField(required=True)
+    shape_id = serializers.CharField(required=True)
+    topping_id = serializers.CharField(required=True)
+    berry_id = serializers.CharField(required=False, allow_null=True)
+    decor_id = serializers.CharField(required=False, allow_null=True)
 
 
 class CakeSerializer(serializers.ModelSerializer):
@@ -25,8 +25,16 @@ class CakeSerializer(serializers.ModelSerializer):
         fields = ['title', 'level', 'shape', 'topping', 'berry', 'decor', 'is_published', 'inscription', 'comment']
 
     def create(self, validated_data):
-        validated_data['is_published'] = False
-        return super().create(validated_data)
+        cake = Cake.objects.create(
+            title=validated_data['title'],
+            level=CakeLevel.objects.get(id=validated_data['level'].id),
+            shape=CakeShape.objects.get(id=validated_data['shape'].id),
+            topping=CakeTopping.objects.get(id=validated_data['topping'].id),
+            berry=CakeBerry.objects.get(id=validated_data['berry'].id),
+            decor=CakeDecor.objects.get(id=validated_data['decor'].id),
+            is_published=False
+        )
+        return cake
 
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
