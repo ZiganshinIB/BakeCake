@@ -1,11 +1,7 @@
-from oauthlib.uri_validate import query
 from rest_framework import viewsets, permissions
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
 from rest_framework import status
 from rest_framework.views import APIView
-from django.utils import timezone
 
 from django.db.models import Q
 

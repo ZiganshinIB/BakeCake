@@ -3,7 +3,7 @@ from django.urls import include, path
 from .api_views import CakeViewSet, CakeLevelViewSet, CakeShapeViewSet, CakeToppingViewSet, CakeBerryViewSet, \
     CakeDecorViewSet, OrderViewSet, CalculateCakePriceApiView, CakeApiView, OrderApiView
 
-from rest_framework.routers import DefaultRouter, SimpleRouter
+from rest_framework.routers import SimpleRouter
 
 router = SimpleRouter()
 router.register(r'cakes', CakeViewSet)

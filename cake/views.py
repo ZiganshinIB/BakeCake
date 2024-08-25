@@ -11,9 +11,6 @@ from .models import Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, CakeDeco
 from .utils import get_code
 
 
-# Create your views here.
-
-
 class IndexView(TemplateView):
     template_name = 'cake/index.html'
 
@@ -25,7 +22,9 @@ class IndexView(TemplateView):
         context['toppings'] = CakeTopping.objects.all().order_by('price')
         context['berries'] = CakeBerry.objects.all().order_by('price')
         context['decors'] = CakeDecor.objects.all().order_by('price')
+        context['cakes'] = Cake.objects.filter(is_published=True)
         return context
+
 
 # TODO: Список тортов
 class CakeListView(ListView):
@@ -33,9 +32,7 @@ class CakeListView(ListView):
     template_name = 'cake/cake_list.html'
     context_object_name = 'cakes'
 
-# TODO: Создание торта
 
-# TODO: Личный кабинет
 class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'cake/lk-order.html'  # Укажите путь к вашему шаблону
 
@@ -49,7 +46,6 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         # Добавляем данные клиента в контекст
         context['title'] = 'Личный кабинет'
         return context
-
 
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -66,7 +62,6 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
 
-# TODO: Регистрация
 @require_POST
 def registration(request):
     print(request.POST)
@@ -106,6 +101,3 @@ def registration(request):
                 return JsonResponse({'status': 'error', 'message': 'Неправильный пин-код'})
         else:
             return JsonResponse({'status': 'error', 'errors': form.errors})
-
-
-
