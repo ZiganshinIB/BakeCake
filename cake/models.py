@@ -1,10 +1,13 @@
+import requests
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-
+from django.conf import settings
 from phonenumber_field.modelfields import PhoneNumberField
 
 from .managers import ClientManager
@@ -268,6 +271,20 @@ class Pay(models.Model):
     def __str__(self):
         return f"Платеж {self.operation_id}"
 
+class Advertising(models.Model):
+    url = models.URLField('Ссылка', blank=True)
+    text = models.TextField('Текст рекламы')
+    responses = models.IntegerField(
+        'Количество откликов',
+        null=True,
+        blank=True,
+        default=0,
+    )
+
+    class Meta:
+        verbose_name = 'Реклама'
+        verbose_name_plural = 'Реклама'
+
 class Client(AbstractBaseUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
 
@@ -333,3 +350,20 @@ class Client(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.name} ({self.phone_number})"
+
+
+
+@receiver(pre_save, sender=Advertising)
+def pre_save_advertising(sender, instance, **kwargs):
+    if not instance.pk:
+        url = "https://t.ly/api/v1/link/shorten"
+        headers = {
+            "Authorization": f"Bearer {settings.TLY_API_TOKEN}"
+        }
+        payload = {
+            "long_url": "https://www.selfstorage.com/"
+        }
+        response = requests.post(url, headers=headers, data=payload)
+        response.raise_for_status()
+        instance.url = response.json()["short_url"]
+        instance.responses = 0

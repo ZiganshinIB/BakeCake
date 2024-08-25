@@ -167,4 +167,7 @@ if env.str('EMAIL_HOST_USER', '') and env.str('EMAIL_HOST_PASSWORD', ''):
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Advansed settings
+TLY_API_TOKEN = env.str('TLY_API_TOKEN', 'default')
+
 
