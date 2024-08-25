@@ -31,7 +31,7 @@
 			{% for cake in cakes %}
 				<div class="col-12 col-sm-6 col-lg-4 d-flex flex-column align-items-center">
 					<div class="card border-0 cake__hover">
-						<a href="#" class="card-img-overlay"></a>
+						<a href="{% url 'catalog' %}" class="card-img-overlay"></a>
 						<img src="{{ cake.image.url }}" alt="cake" class="">
 						<span class="cake_blue mt-4 fw-lighter mb-4 text-center">{{ cake.title }}</span>
 					</div>

@@ -165,6 +165,13 @@ class Cake(models.Model):
         blank=True,
         null=True
     )
+    price = models.DecimalField(
+        verbose_name='Стоимость',
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True
+    )
 
     class Meta:
         verbose_name = 'Торт'
