@@ -37,6 +37,14 @@ class OrderApiView(APIView):
                 decor = CakeDecor.objects.get(id=order_params['cake']['decor_id'])
             else:
                 decor = None
+            if 'inscription' in order_params['cake']:
+                inscription = order_params['cake']['inscription']
+            else:
+                inscription = " "
+            if 'comment' in order_params['cake']:
+                comment = order_params['cake']['comment']
+            else:
+                comment = " "
             cake = Cake.objects.create(
                 title='Торт',
                 level=CakeLevel.objects.get(id=order_params['cake']['level_id']),
@@ -44,12 +52,14 @@ class OrderApiView(APIView):
                 topping=CakeTopping.objects.get(id=order_params['cake']['topping_id']),
                 berry=berry,
                 decor=decor,
-                is_published=False
+                is_published=False,
+                inscription=inscription,
+                comment=comment
             )
             if 'delivery_comments' in order_params:
-                comment = order_params['delivery_comments']
+                delivery_comments = order_params['delivery_comments']
             else:
-                comment = " "
+                delivery_comments = " "
             order = Order.objects.create(
                 customer=Client.objects.get(id=client.id),
                 cake=Cake.objects.get(id=cake.id),
@@ -57,7 +67,7 @@ class OrderApiView(APIView):
                 address=order_params['address'],
                 delivery_date=order_params['delivery_date'],
                 delivered_at=order_params['delivered_at'],
-                delivery_comments=comment
+                delivery_comments=delivery_comments
             )
             return Response(status=status.HTTP_200_OK, data={"order": order.id})
 

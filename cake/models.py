@@ -226,13 +226,13 @@ class Order(models.Model):
         blank=True,
     )
     delivery_date = models.DateTimeField(
-        'Доставить к',
+        'Дата доставки',
         blank=True,
         null=True,
         db_index=True
     )
     delivered_at = models.DateTimeField(
-        'Время доставки заказа',
+        'Время доставки',
         blank=True,
         null=True,
         db_index=True

@@ -107,8 +107,8 @@ Vue.createApp({
             Topping: null,
             Berries: null,
             Decor: null,
-            Words: '',
-            Comments: '',
+            Words: null,
+            Comments: null,
             Designed: false,
 
             Name: '',
@@ -117,7 +117,7 @@ Vue.createApp({
             Address: null,
             Dates: null,
             Time: null,
-            DelivComments: ''
+            DelivComments: null
         }
     },
     methods: {
@@ -128,7 +128,41 @@ Vue.createApp({
         },
         ToPay() {
             console.log('PAYMENT');
-            // написать код для отправки запроса оформления заказа
+
+            let requestBody = {
+                price: this.Cost,
+                cake: {
+                    level_id: this.Levels,
+                    shape_id: this.Form,
+                    topping_id: this.Topping,
+                    berry_id: this.Berries,
+                    decor_id: this.Decor,
+                    inscription: this.Words,
+                    comment: this.Comments
+                },
+                client: {
+                    name: this.Name,
+                    phone_number: this.Phone,
+                    email: this.Email,
+                    password: "11tryry5646451"
+                },
+                address: this.Address,
+                delivery_date: this.Dates,
+                delivered_at: this.Dates + ' ' + this.Time,
+                delivery_comments: this.DelivComments
+            };
+
+            const request = $.ajax({
+                url: '/api/v1/order/',
+                type: 'POST',
+                data: JSON.stringify(requestBody),
+                contentType: "application/json",
+                async: false,
+                success: function (data) {
+                    order = data;
+                }
+            });
+            return order;
         }
     },
     computed: {
