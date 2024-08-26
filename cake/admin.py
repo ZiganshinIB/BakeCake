@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Client, Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, Order, CakeDecor
+from .models import Client, Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, Order, CakeDecor, Advertising
 
 
 @admin.register(Client)
@@ -54,3 +54,6 @@ class OrderAdmin(admin.ModelAdmin):
     def get_deliv_comments(self, obj):
         return obj.cake.deliv_comments
 
+@admin.register(Advertising)
+class AdvertisingAdmin(admin.ModelAdmin):
+    list_display = ("text", "url")
