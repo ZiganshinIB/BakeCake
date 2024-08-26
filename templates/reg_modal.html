@@ -1,7 +1,6 @@
 {% load static %}
 <script>
     const registerUrl = "{% url 'registration' %}";  // Получаем URL для регистрации
-    const csrfToken = "{{ csrf_token }}";
     const agreementUrl = "{% static 'file.pdf' %}";
 </script>
 <aside class="modal fade" id="RegModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

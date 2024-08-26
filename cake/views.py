@@ -2,6 +2,7 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView, ListView
 
@@ -62,7 +63,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
             return self.put(request, *args, **kwargs)
         return super().dispatch(request, *args, **kwargs)
 
-
+@csrf_exempt
 @require_POST
 def registration(request):
     print(request.POST)
