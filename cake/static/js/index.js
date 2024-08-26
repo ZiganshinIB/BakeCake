@@ -142,7 +142,6 @@ Vue.createApp({
                     name: this.Name,
                     phone_number: this.Phone,
                     email: this.Email,
-                    password: "11tryry5646451"
                 },
                 address: this.Address,
                 delivery_date: this.Dates,

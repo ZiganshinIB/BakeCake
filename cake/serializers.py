@@ -11,6 +11,13 @@ class ClientRegistrationSerializer(BaseUserRegistrationSerializer):
         }
 
 
+class ClientSerializer(serializers.Serializer):
+    name = serializers.CharField(required=True)
+    phone_number = serializers.CharField(required=True)
+    email = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)
+
+
 class CakePriceRequestSerializer(serializers.Serializer):
     level_id = serializers.CharField(required=True)
     shape_id = serializers.CharField(required=True)
@@ -63,7 +70,7 @@ class CakeDecorSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    client = ClientRegistrationSerializer()
+    client = ClientSerializer()
     cake = CakePriceRequestSerializer()
     inscription = serializers.CharField(required=False, allow_null=True)
     comment = serializers.CharField(required=False, allow_null=True)
