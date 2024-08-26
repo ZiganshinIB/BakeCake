@@ -378,7 +378,7 @@ def pre_save_advertising(sender, instance, **kwargs):
             "Authorization": f"Bearer {settings.TLY_API_TOKEN}"
         }
         payload = {
-            "long_url": "https://www.selfstorage.com/"
+            "long_url": "https://www.ziganshinproject.ru/"
         }
         response = requests.post(url, headers=headers, data=payload)
         response.raise_for_status()
