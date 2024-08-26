@@ -23,7 +23,7 @@ class OrderApiView(APIView):
                 name=order_params['client']['name'],
                 phone_number=order_params['client']['phone_number'],
                 email=order_params['client']['email'],
-                password=order_params['client']['password'],
+
             )
             if 'berry_id' in order_params['cake']:
                 berry = CakeBerry.objects.get(id=order_params['cake']['berry_id'])

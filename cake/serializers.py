@@ -15,7 +15,6 @@ class ClientSerializer(serializers.Serializer):
     name = serializers.CharField(required=True)
     phone_number = serializers.CharField(required=True)
     email = serializers.CharField(required=True)
-    password = serializers.CharField(required=True)
 
 
 class CakePriceRequestSerializer(serializers.Serializer):
