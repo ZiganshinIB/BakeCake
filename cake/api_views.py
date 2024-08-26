@@ -19,7 +19,7 @@ class OrderApiView(APIView):
         serializer = OrderSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             order_params = serializer.validated_data
-            client = Client.objects.create(
+            client, created = Client.objects.get_or_create(
                 name=order_params['client']['name'],
                 phone_number=order_params['client']['phone_number'],
                 email=order_params['client']['email'],

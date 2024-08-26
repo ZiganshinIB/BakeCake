@@ -159,12 +159,29 @@ Vue.createApp({
             if (this.Words) {
                 requestBody.inscription = this.Words;
             }
-
+            const csrftoken = getCookie('csrftoken')
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = jQuery.trim(cookies[i]);
+                        if (cookie.startsWith(name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break; // Выходим, как только найдём нужное cookie
+                        }
+                    }
+                }
+                return cookieValue;
+            }
             const request = $.ajax({
                 url: '/api/v1/order/',
                 type: 'POST',
                 data: JSON.stringify(requestBody),
                 contentType: "application/json",
+                headers: {
+                    'X-CSRFToken': csrftoken // Установка CSRF-токена в заголовок
+                },
                 async: false,
                 success: function (data) {
                     order = data;
@@ -186,11 +203,28 @@ Vue.createApp({
                 berry_id: this.Berries,
                 decor_id: this.Decor,
             };
-
+            const csrftoken = getCookie('csrftoken')
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = jQuery.trim(cookies[i]);
+                        if (cookie.startsWith(name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break; // Выходим, как только найдём нужное cookie
+                        }
+                    }
+                }
+                return cookieValue;
+            }
             const request = $.ajax({
                 url: '/api/v1/calc/',
                 type: 'POST',
                 data: JSON.stringify(requestBody),
+                headers: {
+                    'X-CSRFToken': csrftoken // Установка CSRF-токена в заголовок
+                },
                 contentType: "application/json",
                 async: false,
                 success: function (data) {
@@ -217,12 +251,29 @@ Vue.createApp({
             if (this.Words) {
                 requestBody.label = this.Words;
             }
-
+            const csrftoken = getCookie('csrftoken')
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = jQuery.trim(cookies[i]);
+                        if (cookie.startsWith(name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break; // Выходим, как только найдём нужное cookie
+                        }
+                    }
+                }
+                return cookieValue;
+            }
             const request = $.ajax({
                 url: '/api/v1/cake/',
                 type: 'GET',
                 data: requestBody,
                 contentType: "application/json",
+                headers: {
+                    'X-CSRFToken': csrftoken // Установка CSRF-токена в заголовок
+                },
                 async: false,
                 success: function (data) {
                     cake = data;
