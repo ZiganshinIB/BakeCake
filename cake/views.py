@@ -102,3 +102,12 @@ def registration(request):
                 return JsonResponse({'status': 'error', 'message': 'Неправильный пин-код'})
         else:
             return JsonResponse({'status': 'error', 'errors': form.errors})
+
+
+class CakesListView(ListView):
+    model = Cake
+    template_name = 'cake/cake-list.html'
+    context_object_name = 'cakes'
+
+    def get_queryset(self):
+        return Cake.objects.filter(is_published=True)
