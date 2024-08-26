@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.sites import requests
+import requests
 
 from .models import Client, Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, Order, CakeDecor, Advertising
 from django.conf import settings
