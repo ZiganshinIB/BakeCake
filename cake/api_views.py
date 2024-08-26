@@ -96,16 +96,8 @@ class CakeApiView(APIView):
 
 
 class CalculateCakePriceApiView(APIView):
-    permission_classes = [permissions.AllowAny | permissions.IsAuthenticated]
 
-
-    @method_decorator(csrf_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super(CalculateCakePriceApiView, self).dispatch(*args, **kwargs)
-
-    @method_decorator(csrf_exempt)
     def post(self, request, **kwargs):
-
         serializer = CakePriceRequestSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             cake_params = serializer.validated_data

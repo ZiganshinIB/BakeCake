@@ -181,8 +181,12 @@ Vue.createApp({
                 url: '/api/v1/order/',
                 type: 'POST',
                 data: JSON.stringify(requestBody),
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                },
                 contentType: "application/json",
                 async: false,
+
                 success: function (data) {
                     order = data;
                 }
@@ -203,24 +207,23 @@ Vue.createApp({
                 berry_id: this.Berries,
                 decor_id: this.Decor
             };
-            fetch('/api/v1/calc/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken
+
+            const request = $.ajax({
+                url: '/api/v1/calc/',
+                type: 'POST',
+                data: JSON.stringify(requestBody),
+                contentType: "application/json",
+                async: false,
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
                 },
-                body: JSON.stringify(requestBody)
-                }).then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok.');
-                }).then(data => {
+                success: function (data) {
                     price = data.price;
-                }).catch(error => {
-                    console.error('Error:', error.message);
-                });
+                }
+            });
+            console.log(price.value);
             return price;
+
         },
         Cake() {
             let requestBody = {
@@ -247,6 +250,9 @@ Vue.createApp({
                 data: requestBody,
                 contentType: "application/json",
                 async: false,
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                },
                 success: function (data) {
                     cake = data;
                 }

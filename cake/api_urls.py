@@ -18,7 +18,7 @@ router.register(r'orders', OrderViewSet)
 urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('', include(router.urls)),
-    re_path(r'^calc/', CalculateCakePriceApiView.as_view()),
+    path('calc/', CalculateCakePriceApiView.as_view()),
     path('cake/', CakeApiView.as_view()),
     path('order/', OrderApiView.as_view())
 ]
