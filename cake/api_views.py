@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework import status
@@ -14,7 +16,7 @@ from .permissions import IsOwnerOrReadOnly, CanUpdateCake, CanDeleteCake, CanUpd
 
 
 class OrderApiView(APIView):
-
+    permission_classes = [permissions.AllowAny, permissions.IsAuthenticated]
     def post(self, request, **kwargs):
         serializer = OrderSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -94,7 +96,16 @@ class CakeApiView(APIView):
 
 
 class CalculateCakePriceApiView(APIView):
+    permission_classes = [permissions.AllowAny | permissions.IsAuthenticated]
+
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(CalculateCakePriceApiView, self).dispatch(*args, **kwargs)
+
+    @method_decorator(csrf_exempt)
     def post(self, request, **kwargs):
+
         serializer = CakePriceRequestSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             cake_params = serializer.validated_data

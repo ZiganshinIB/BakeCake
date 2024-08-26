@@ -49,7 +49,6 @@ Vue.createApp({
                 const formData = new FormData();
                 formData.append('phone_number', this.RegInput);
                 formData.append('name', this.Name);
-                formData.append('csrfmiddlewaretoken', csrfToken);
                 const response = fetch(registerUrl, {
                     method: 'POST',
                     body: formData
@@ -84,7 +83,6 @@ Vue.createApp({
                 alert("Подтверждение PIN-кода")
                 const formData = new FormData();
                 formData.append('pin', this.RegInput); // Отправляем PIN-код
-                formData.append('csrfmiddlewaretoken', csrfToken);
                 const response = fetch(registerUrl, {
                     method: 'POST',
                     body: formData
