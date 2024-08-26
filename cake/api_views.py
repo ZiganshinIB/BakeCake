@@ -16,16 +16,15 @@ from .permissions import IsOwnerOrReadOnly, CanUpdateCake, CanDeleteCake, CanUpd
 
 
 class OrderApiView(APIView):
-    permission_classes = [permissions.AllowAny, permissions.IsAuthenticated]
+
     def post(self, request, **kwargs):
         serializer = OrderSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             order_params = serializer.validated_data
-            client = Client.objects.create(
+            client, created = Client.objects.get_or_create(
                 name=order_params['client']['name'],
                 phone_number=order_params['client']['phone_number'],
                 email=order_params['client']['email'],
-                password=order_params['client']['password'],
             )
             if 'berry_id' in order_params['cake']:
                 berry = CakeBerry.objects.get(id=order_params['cake']['berry_id'])
@@ -96,7 +95,7 @@ class CakeApiView(APIView):
 
 
 class CalculateCakePriceApiView(APIView):
-    permission_classes = [permissions.AllowAny | permissions.IsAuthenticated]
+
 
 
     @method_decorator(csrf_exempt)
