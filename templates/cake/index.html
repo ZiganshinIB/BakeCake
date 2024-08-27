@@ -3,6 +3,12 @@
 {% load static %}
 {% block content %}
 {% include 'header.html' %}
+<script>
+	const name = '{{ user.name }}';
+	const phone = '{{ user.phone_number }}';
+	const email = '{{ user.email }}';
+
+</script>
 <main>
 	<div class="container mt-header">
 		<!-- Регистрация -->

@@ -24,9 +24,10 @@ class OrderApiView(APIView):
             client, created = Client.objects.get_or_create(
                 name=order_params['client']['name'],
                 phone_number=order_params['client']['phone_number'],
-                email=order_params['client']['email'],
-                password=order_params['client']['password'],
             )
+            if order_params['client']['email']:
+                client.email = order_params['client']['email']
+                client.save()
             if 'berry_id' in order_params['cake']:
                 berry = CakeBerry.objects.get(id=order_params['cake']['berry_id'])
             else:
