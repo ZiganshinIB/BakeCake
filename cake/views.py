@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
@@ -66,7 +68,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 @csrf_exempt
 @require_POST
 def registration(request):
-    print(request.POST)
+
     if 'phone_number' in request.POST:
         form = PhoneForm(request.POST)
         if form.is_valid():
@@ -75,8 +77,6 @@ def registration(request):
             code = get_code()
             client, created = Client.objects.get_or_create(phone_number=phone_number)
             if (not created) and (client.name != name):
-                print('except')
-                # except
                 return JsonResponse({'status': 'error', 'errors': 'Имя не совпадает'})
             client.pin = code
             client.name = name
@@ -87,7 +87,8 @@ def registration(request):
 
             return JsonResponse({'status': 'success', 'phone_number': phone_number, 'code': code})
         else:
-            return JsonResponse({'status': 'error', 'errors': form.errors})
+            print(form.errors)
+            return JsonResponse({'status': 'error', 'errors': "Неправильный номер телефона"})
     elif 'pin' in request.POST:
         form = PinForm(request.POST)
         if form.is_valid():
