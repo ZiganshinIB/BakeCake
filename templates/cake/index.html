@@ -185,6 +185,7 @@
 				</form>
 				<v-form :validation-schema="schema2" @submit="ToPay">
 					<div class="col">
+
 						<div class="d-flex flex-column position-relative pb-5">
 							<h2 class="fs_40 font_Gogh cake_blue text-center align-self-center">Оформление заказа</h2>
 							<span class="cake_pink mt-2 position-absolute bottom-0">
@@ -193,7 +194,9 @@
 								<error-message name="email" class="from__alert"></error-message>
 							</span>
 						</div>
+
 						<div class="row">
+
 							<div class="col-6 col-lg-4 d-flex flex-column">
 								<label for="name" class="my-1 fs_40 cake_blue">Имя</label>
 								<label for="phone" class="my-1 fs_40 cake_blue">Телефон</label>
@@ -201,17 +204,17 @@
 							</div>
 							<div class="col-6 col-lg-4 d-flex flex-column">
 								<div class="position-relative pb-1">
-									<v-field v-model="Name" :class="Name ? 'cake__border_blue': ''" type="text" name="name" id="name" placeholder="Введите ваше имя" class="form-control my-3 cake__textinput"></v-field>
+									<v-field v-model="Name" :class="Name ? 'cake__border_blue': ''" type="text" name="name" id="name" placeholder="Введите ваше имя" class="form-control my-3 cake__textinput" {% if request.user.is_authenticated %}readonly{% endif %}></v-field>
 									<v-field v-model="Name" type="text" name="name_format" class="d-none"></v-field>
 									<error-message name="name_format" class="position-absolute bottom-0 cake_pink fs_12"></error-message>
 								</div>
 								<div class="position-relative pb-1">
-									<v-field v-model="Phone" :class="Phone ? 'cake__border_blue': ''" type="tel" name="phone" id="phone" placeholder="Введите номер" class="form-control my-3 cake__textinput"></v-field>
+									<v-field {% if request.user.is_authenticated %}readonly{% endif %} v-model="Phone" :class="Phone ? 'cake__border_blue': ''" type="tel" name="phone" id="phone" placeholder="Введите номер" class="form-control my-3 cake__textinput"></v-field>
 									<v-field v-model="Phone" type="phone" name="phone_format" class="d-none"></v-field>
 									<error-message name="phone_format" class="position-absolute bottom-0 cake_pink fs_12"></error-message>
 								</div>
 								<div class="position-relative pb-1">
-									<v-field v-model="Email" :class="Email ? 'cake__border_blue': ''" type="email" name="email" id="email" placeholder="Введите почту" class="form-control my-3 cake__textinput"></v-field>
+									<v-field {% if request.user.is_authenticated %}readonly{% endif %} v-model="Email" :class="Email ? 'cake__border_blue': ''" type="email" name="email" id="email" placeholder="Введите почту" class="form-control my-3 cake__textinput"></v-field>
 									<v-field v-model="Email" type="email" name="email_format" class="d-none"></v-field>
 									<error-message name="email_format" class="position-absolute bottom-0 cake_pink fs_12"></error-message>
 								</div>
