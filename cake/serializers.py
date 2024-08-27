@@ -1,3 +1,5 @@
+from distutils.log import fatal
+
 from djoser.serializers import UserCreateSerializer as BaseUserRegistrationSerializer
 from rest_framework import serializers
 from .models import Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, CakeDecor, Order, Client
@@ -12,9 +14,15 @@ class ClientRegistrationSerializer(BaseUserRegistrationSerializer):
 
 
 class ClientSerializer(serializers.Serializer):
-    name = serializers.CharField(required=True)
-    phone_number = serializers.CharField(required=True)
-    email = serializers.CharField(required=True)
+    name = serializers.CharField()
+    phone_number = serializers.CharField()
+    email = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+
+    class Meta:
+        fields = ['name', 'phone_number', 'email']
+        extra_kwargs = {
+            'email': {'required': False}
+        }
 
 
 class CakePriceRequestSerializer(serializers.Serializer):
@@ -92,4 +100,5 @@ class OrderSerializer(serializers.ModelSerializer):
             'comment'
         ]
         read_only_fields = ['registered_at']
+
 
