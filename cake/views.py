@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_exempt
@@ -11,6 +12,7 @@ from django.views.generic import TemplateView, ListView
 
 from .forms import PhoneForm, PinForm, ClientEditForm
 from .models import Cake, CakeLevel, CakeShape, CakeTopping, CakeBerry, CakeDecor, Client
+from .serializers import RegistrationNumberSerializer
 from .utils import get_code
 
 
@@ -70,10 +72,22 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 def registration(request):
 
     if 'phone_number' in request.POST:
-        form = PhoneForm(request.POST)
-        if form.is_valid():
-            phone_number = form.cleaned_data['phone_number']
-            name = form.cleaned_data['name']
+        cd = request.POST
+        serializer = RegistrationNumberSerializer(data=request.POST)
+        phone_number = cd.get('phone_number')
+        if Client.objects.filter(phone_number=phone_number).exists():
+            code = get_code()
+            client = Client.objects.get(phone_number=phone_number)
+            if (client.name != cd.get('name')):
+                return JsonResponse({'status': 'error', 'errors': 'Имя не совпадает'})
+            client.pin = code
+            client.save()
+            request.session['verification_code'] = code
+            request.session['phone_number'] = phone_number
+            return JsonResponse({'status': 'success', 'phone_number': phone_number, 'code': code})
+        elif serializer.is_valid():
+            phone_number = serializer.validated_data['phone_number']
+            name = serializer.validated_data['name']
             code = get_code()
             client, created = Client.objects.get_or_create(phone_number=phone_number)
             if (not created) and (client.name != name):
@@ -87,8 +101,12 @@ def registration(request):
 
             return JsonResponse({'status': 'success', 'phone_number': phone_number, 'code': code})
         else:
-            print(form.errors)
-            return JsonResponse({'status': 'error', 'errors': "Неправильный номер телефона"})
+            print(serializer.errors)
+            if 'phone_number' in serializer.errors:
+                return JsonResponse({'status': 'error', 'errors': serializer.errors['phone_number'][0]})
+            if 'name' in serializer.errors:
+                return JsonResponse({'status': 'error', 'errors': serializer.errors['name'][0]})
+            return JsonResponse({'status': 'error', 'errors': "Обратитесь в ТП"})
     elif 'pin' in request.POST:
         form = PinForm(request.POST)
         if form.is_valid():
