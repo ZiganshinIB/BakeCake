@@ -19,7 +19,7 @@ class OrderApiView(APIView):
 
     def post(self, request, **kwargs):
         serializer = OrderSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid():
             order_params = serializer.validated_data
             client, created = Client.objects.get_or_create(
                 name=order_params['client']['name'],
@@ -69,6 +69,8 @@ class OrderApiView(APIView):
                 delivery_comments=delivery_comments
             )
             return Response(status=status.HTTP_200_OK, data={"order": serializer.validated_data})
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
 
 
 class CakeApiView(APIView):
