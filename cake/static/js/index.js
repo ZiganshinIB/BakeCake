@@ -1,3 +1,19 @@
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
 Vue.createApp({
     name: "App",
     components: {
@@ -111,9 +127,9 @@ Vue.createApp({
             Comments: null,
             Designed: false,
 
-            Name: '',
-            Phone: null,
-            Email: null,
+            Name: name,
+            Phone: phone,
+            Email: email,
             Address: null,
             Dates: null,
             Time: null,
@@ -142,6 +158,7 @@ Vue.createApp({
                     name: this.Name,
                     phone_number: this.Phone,
                     email: this.Email,
+                    password: "11tryry5646451"
                 },
                 address: this.Address,
                 delivery_date: this.Dates,
