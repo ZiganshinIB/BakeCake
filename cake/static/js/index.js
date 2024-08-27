@@ -93,7 +93,7 @@ Vue.createApp({
                     if (value) {
                         return true;
                     }
-                    return ' почту';
+                    return true;
                 },
                 address: (value) => {
                     if (value) {
