@@ -13,6 +13,16 @@ class ClientRegistrationSerializer(BaseUserRegistrationSerializer):
         }
 
 
+class RegistrationNumberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = ('name', 'phone_number')
+        extra_kwargs = {
+          'name': {'required': True},
+          'phone_number': {'required': True},
+        }
+
+
 class ClientSerializer(serializers.Serializer):
     name = serializers.CharField()
     phone_number = serializers.CharField()
